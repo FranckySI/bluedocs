@@ -63,7 +63,7 @@
 
                     <x-slot name="content">
                         <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profil') }}
+                            {{ __('Mon Profil') }}
                         </x-dropdown-link>
 
                         <!-- Authentication -->
@@ -109,7 +109,7 @@
             </x-responsive-nav-link>
         @endauth
             <x-responsive-nav-link :href="route('profile.edit')" :active="request()->routeIs('profile.edit')">
-                {{ __('Profil') }}
+                {{ __('Mon Profil') }}
             </x-responsive-nav-link>
 
             <x-responsive-nav-link :href="route('login')" :active="request()->routeIs('login')">
@@ -147,7 +147,7 @@
             <div class="mt-3 space-y-1">
             @auth
                 <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profil') }}
+                    {{ __('Mon Profil') }}
                 </x-responsive-nav-link>
 
                 <!-- Authentication -->
