@@ -2,6 +2,24 @@
 
 
 <style>
+  :root{
+    /* --- Charte graphique BlueDocs --- */
+    --bd-blue-dark:#00111f;
+    --bd-blue:#003366;
+    --bd-blue-light:#0e5fa8;
+    --bd-red:#cc0033;
+    --bd-red-dark:#98001f;
+    --bd-white:#ffffff;
+    --bd-paper:#f4f7fb;
+    --bd-ink:#0a1420;
+    --bd-muted:#93a6c2;
+    --bd-line:rgba(255,255,255,0.12);
+ 
+    --bd-font-display:'Space Grotesk', sans-serif;
+    --bd-font-body:'Inter', sans-serif;
+    --bd-font-mono:'JetBrains Mono', monospace;
+  }
+  
   body{
     margin:0;
     background:var(--bd-paper);
@@ -79,31 +97,6 @@
     line-height:1.6;
   }
 
-  /* CTA type "Choisir un fichier" */
-  .bd-upload{
-    display:inline-flex;
-    align-items:stretch;
-    background:var(--bd-white);
-    border-radius:6px;
-    overflow:hidden;
-    box-shadow:0 18px 40px rgba(0,0,0,0.35);
-  }
-  .bd-upload span{
-    display:flex; align-items:center;
-    padding:0 26px;
-    font-weight:600; font-size:15px;
-    color:var(--bd-ink);
-  }
-  .bd-upload button{
-    display:flex; align-items:center; justify-content:center;
-    width:52px;
-    border:0; cursor:pointer;
-    background:var(--bd-blue-dark);
-    color:var(--bd-red);
-    font-size:18px;
-    transition:background .2s ease;
-  }
-  .bd-upload button:hover, .bd-upload button:focus-visible{ background:var(--bd-red); color:var(--bd-white); }
 
   /* Journal d'activité en direct — élément signature */
   .bd-activity{

@@ -5,6 +5,23 @@
 
 
 <style>
+  :root{
+    /* --- Charte graphique BlueDocs --- */
+    --bd-blue-dark:#00111f;
+    --bd-blue:#003366;
+    --bd-blue-light:#0e5fa8;
+    --bd-red:#cc0033;
+    --bd-red-dark:#98001f;
+    --bd-white:#ffffff;
+    --bd-paper:#f4f7fb;
+    --bd-ink:#0a1420;
+    --bd-muted:#93a6c2;
+    --bd-line:rgba(255,255,255,0.12);
+ 
+    --bd-font-display:'Space Grotesk', sans-serif;
+    --bd-font-body:'Inter', sans-serif;
+    --bd-font-mono:'JetBrains Mono', monospace;
+  }
   body{
     margin:0;
     background:var(--bd-paper);
