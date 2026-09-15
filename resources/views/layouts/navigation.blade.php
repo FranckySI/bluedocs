@@ -18,7 +18,7 @@
 
                 @auth
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
+                        {{ __('Tableau de bord') }}
                     </x-nav-link>
 
                 
@@ -101,7 +101,7 @@
 
         @auth
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
+                {{ __('Tableau de bord') }}
             </x-responsive-nav-link>
 
             <x-responsive-nav-link :href="route('pages.edit')" :active="request()->routeIs('pages.edit')">
