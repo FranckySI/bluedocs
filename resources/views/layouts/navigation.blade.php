@@ -39,7 +39,7 @@
                                 @if (Auth::check())
                                     {{ Auth::user()->name }}
                                 @else
-                                    {{ __('Guest') }}
+                                    {{ __('Visiteur') }}
                                 @endif
                             </div>
 
