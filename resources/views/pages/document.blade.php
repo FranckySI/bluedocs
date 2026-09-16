@@ -22,6 +22,7 @@
     --bd-font-body:'Inter', sans-serif;
     --bd-font-mono:'JetBrains Mono', monospace;
   }
+  
   body{
     margin:0;
     background:var(--bd-paper);
