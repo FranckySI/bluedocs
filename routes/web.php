@@ -2,10 +2,9 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\RegisteredUserController;
 
-Route::get('/welcome', function () {
-    return view('pages.welcome');
-});
+
 
 Route::get('/', function () {
     return view('pages.accueil');
@@ -25,6 +24,11 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 
+
+Route::middleware('can:create-users')->group(function () {
+    Route::get('register', [RegisteredUserController::class, 'create'])->name('register');
+    Route::post('register', [RegisteredUserController::class, 'store']);
+});
 
 
 

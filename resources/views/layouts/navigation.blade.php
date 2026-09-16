@@ -66,11 +66,13 @@
                                 {{ __('Mon Profil') }}
                             </x-dropdown-link>
 
+                        
                         <!-- Ajouter un utilisateur -->
+                        @can('create-users')
                             <x-dropdown-link :href="route('register')">
                                 {{ __('Ajouter un utilisateur') }}
                             </x-dropdown-link>
-                        
+                        @endcan
                         <!-- Deconnexion -->
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
