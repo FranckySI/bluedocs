@@ -1,3 +1,3 @@
 <x-app-layout>
-    <h1>Editer la page</h1>
+    <h1>Arborescence du site</h1>
 </x-app-layout>
