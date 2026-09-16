@@ -366,15 +366,97 @@
         <!-- ===== Colonnes principales ===== -->
         <div class="bd-grid">
 
+      
             <!-- Dernières modifications -->
-
+            <div class="bd-panel">
+                <div class="bd-panel-head">
+                    <h2>Dernières modifications</h2>
+                    <a href="documents.php">Voir tout</a>
+                </div>
+                <table class="bd-table">
+                    <thead>
+                        <tr>
+                            <th>Document</th>
+                            <th>Action</th>
+                            <th>Utilisateur</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- TODO backend : foreach ($modifications as $m) ... -->
+                        <tr>
+                            <td>
+                                <span class="bd-doc-name">Rapport_annuel_2026.pdf</span>
+                                <span class="bd-doc-meta">2.4 Mo · PDF</span>
+                            </td>
+                            <td><span class="bd-badge add">Ajout</span></td>
+                            <td>
+                                <div class="bd-user-cell">
+                                    <div class="bd-mini-avatar">AD</div> Admin
+                                </div>
+                            </td>
+                            <td>Aujourd'hui, 09:14</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="bd-doc-name">Contrat_fournisseur.docx</span>
+                                <span class="bd-doc-meta">840 Ko · Word</span>
+                            </td>
+                            <td><span class="bd-badge edit">Modification</span></td>
+                            <td>
+                                <div class="bd-user-cell">
+                                    <div class="bd-mini-avatar" style="background:var(--bd-red);">EM</div> E. Martin
+                                </div>
+                            </td>
+                            <td>Aujourd'hui, 08:47</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="bd-doc-name">Ancienne_procedure.pdf</span>
+                                <span class="bd-doc-meta">1.1 Mo · PDF</span>
+                            </td>
+                            <td><span class="bd-badge del">Suppression</span></td>
+                            <td>
+                                <div class="bd-user-cell">
+                                    <div class="bd-mini-avatar">AD</div> Admin
+                                </div>
+                            </td>
+                            <td>Aujourd'hui, 08:02</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="bd-doc-name">Procedure_conges.pdf</span>
+                                <span class="bd-doc-meta">560 Ko · PDF</span>
+                            </td>
+                            <td><span class="bd-badge add">Ajout</span></td>
+                            <td>
+                                <div class="bd-user-cell">
+                                    <div class="bd-mini-avatar" style="background:var(--bd-red);">SL</div> S. Leroy
+                                </div>
+                            </td>
+                            <td>Hier, 17:32</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="bd-doc-name">Grille_salariale.xlsx</span>
+                                <span class="bd-doc-meta">310 Ko · Excel</span>
+                            </td>
+                            <td><span class="bd-badge edit">Modification</span></td>
+                            <td>
+                                <div class="bd-user-cell">
+                                    <div class="bd-mini-avatar">AD</div> Admin
+                                </div>
+                            </td>
+                            <td>Hier, 15:10</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
             <!-- Connexions récentes -->
             <div class="bd-panel">
                 <div class="bd-panel-head">
                     <h2>Dernières connexions</h2>
-                    <!-- Modifié pour pointer vers une route Laravel -->
-                    <a href="{{ route('profile.edit') }}">Voir tout</a>
                 </div>
 
                 <ul class="bd-connexions">
@@ -395,12 +477,12 @@
 
                             <!-- Formatage de l'heure via Carbon (Affiche l'heure ou "Hier") -->
                             <span class="bd-connexion-time">
-                                @if ($c->updated_at->isToday())
-                                    Aujourd'hui, {{ $c->updated_at->format('H:i') }}
-                                @elseif($c->updated_at->isYesterday())
-                                    Hier, {{ $c->updated_at->format('H:i') }}
+                                @if ($c->last_login_at->isToday())
+                                    Aujourd'hui, {{ $c->last_login_at->format('H:i') }}
+                                @elseif ($c->last_login_at->isYesterday())
+                                    Hier, {{ $c->last_login_at->format('H:i') }}
                                 @else
-                                    {{ $c->updated_at->format('d/m H:i') }}
+                                    {{ $c->last_login_at->format('d/m H:i') }}
                                 @endif
                             </span>
                         </li>
