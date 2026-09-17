@@ -89,7 +89,7 @@
 
         .bd-dash-cta:hover,
         .bd-dash-cta:focus-visible {
-            background: var(--bd-red);
+            background: var(--bd-blue-light);
         }
 
 
@@ -358,100 +358,79 @@
                 <h1 class="bd-dash-title">Bonjour, <span class="accent">{{ Auth::user()->name }}</span></h1>
                 <p class="bd-dash-sub">Voici l'activité de votre espace documentaire aujourd'hui.</p>
             </div>
-            <a class="bd-dash-cta" href="ajouter.php">+ Ajouter un document</a>
+            <a class="bd-dash-cta" href="{{ route('documents.create') }}">+ Ajouter un document</a>
         </div>
-
 
 
         <!-- ===== Colonnes principales ===== -->
         <div class="bd-grid">
 
-
             <!-- Dernières modifications -->
             <div class="bd-panel">
-                <div class="bd-panel-head">
-                    <h2>Dernières modifications</h2>
-                    <a href="documents.php">Voir tout</a>
-                </div>
-                <table class="bd-table">
-                    <thead>
-                        <tr>
-                            <th>Document</th>
-                            <th>Action</th>
-                            <th>Utilisateur</th>
-                            <th>Date</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- TODO backend : foreach ($modifications as $m) ... -->
-                        <tr>
-                            <td>
-                                <span class="bd-doc-name">Rapport_annuel_2026.pdf</span>
-                                <span class="bd-doc-meta">2.4 Mo · PDF</span>
-                            </td>
-                            <td><span class="bd-badge add">Ajout</span></td>
-                            <td>
-                                <div class="bd-user-cell">
-                                    <div class="bd-mini-avatar">AD</div> Admin
-                                </div>
-                            </td>
-                            <td>Aujourd'hui, 09:14</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span class="bd-doc-name">Contrat_fournisseur.docx</span>
-                                <span class="bd-doc-meta">840 Ko · Word</span>
-                            </td>
-                            <td><span class="bd-badge edit">Modification</span></td>
-                            <td>
-                                <div class="bd-user-cell">
-                                    <div class="bd-mini-avatar" style="background:var(--bd-red);">EM</div> E. Martin
-                                </div>
-                            </td>
-                            <td>Aujourd'hui, 08:47</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span class="bd-doc-name">Ancienne_procedure.pdf</span>
-                                <span class="bd-doc-meta">1.1 Mo · PDF</span>
-                            </td>
-                            <td><span class="bd-badge del">Suppression</span></td>
-                            <td>
-                                <div class="bd-user-cell">
-                                    <div class="bd-mini-avatar">AD</div> Admin
-                                </div>
-                            </td>
-                            <td>Aujourd'hui, 08:02</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span class="bd-doc-name">Procedure_conges.pdf</span>
-                                <span class="bd-doc-meta">560 Ko · PDF</span>
-                            </td>
-                            <td><span class="bd-badge add">Ajout</span></td>
-                            <td>
-                                <div class="bd-user-cell">
-                                    <div class="bd-mini-avatar" style="background:var(--bd-red);">SL</div> S. Leroy
-                                </div>
-                            </td>
-                            <td>Hier, 17:32</td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <span class="bd-doc-name">Grille_salariale.xlsx</span>
-                                <span class="bd-doc-meta">310 Ko · Excel</span>
-                            </td>
-                            <td><span class="bd-badge edit">Modification</span></td>
-                            <td>
-                                <div class="bd-user-cell">
-                                    <div class="bd-mini-avatar">AD</div> Admin
-                                </div>
-                            </td>
-                            <td>Hier, 15:10</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+    <div class="bd-panel-head">
+        <h2>Dernières modifications</h2>
+        <a href="{{ route('pages.document') }}">Voir tout</a>
+    </div>
+    <table class="bd-table">
+        <thead>
+            <tr>
+                <th>Document</th>
+                <th>Action</th>
+                <th>Utilisateur</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse ($recentDocuments as $m)
+                @php
+                    // Extraction rapide des initiales de l'utilisateur pour l'avatar mini
+                    $words = explode(' ', $m->user_name ?? 'Anonyme');
+                    $initials = '';
+                    foreach ($words as $w) {
+                        $initials .= mb_substr($w, 0, 1);
+                    }
+                    $initials = mb_strtoupper(mb_substr($initials, 0, 2));
+
+                    // Détection de l'action (Ajout vs Modification)
+                    $isNew = $m->created_at == $m->updated_at;
+                @endphp
+                <tr>
+                    <td>
+                        <a href="{{ route('documents.show', $m->id) }}" class="bd-doc-name" style="text-decoration: none; color: inherit; font-weight: 600;">
+                            {{ $m->title }}
+                        </a>
+                        <span class="bd-doc-meta">Document texte</span>
+                    </td>
+                    <td>
+                        @if($isNew)
+                            <span class="bd-badge add">Ajout</span>
+                        @else
+                            <span class="bd-badge edit">Modification</span>
+                        @endif
+                    </td>
+                    <td>
+                        <div class="bd-user-cell">
+                            <div class="bd-mini-avatar" style="background: {{ $isNew ? 'var(--bd-blue)' : 'var(--bd-red)' }};">
+                                {{ $initials }}
+                            </div> 
+                            {{ $m->user_name ?? 'Anonyme' }}
+                        </div>
+                    </td>
+                    <td>
+                        <!-- Affiche la date proprement -->
+                        {{ $m->updated_at->format('d/m/Y, H:i') }}
+                    </td>
+                </tr>
+            @empty
+                <tr>
+                    <td colspan="4" style="text-align: center; padding: 30px; color: var(--bd-muted);">
+                        Aucune activité récente.
+                    </td>
+                </tr>
+            @endforelse
+        </tbody>
+    </table>
+</div>
 
 
             <!-- Connexions récentes -->

@@ -1,5 +1,5 @@
-
 <x-guest-layout>
+    
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
@@ -33,6 +33,7 @@
             </label>
         </div>
 
+        <!-- Bloc d'actions principal -->
         <div class="flex items-center justify-end mt-4">
             @if (Route::has('password.request'))
                 <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
@@ -44,5 +45,14 @@
                 {{ __('Se connecter') }}
             </x-primary-button>
         </div>
+
+        <!-- Séparateur et Lien Retour à l'accueil (Style Professionnel) -->
+        <div class="mt-6 pt-4 border-t border-gray-100 text-center">
+            <a class="text-xs text-gray-500 hover:text-gray-700 transition duration-150 ease-in-out inline-flex items-center gap-1" href="{{ route('accueil') }}">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                Retourner à l'accueil
+            </a>
+        </div>
+        
     </form>
 </x-guest-layout>

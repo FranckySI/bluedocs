@@ -17,7 +17,7 @@
                     </x-nav-link>
 
 
-                    <x-nav-link :href="route('pages.edit')" :active="request()->routeIs('pages.edit')">
+                    <x-nav-link :href="route('pages.plan')" :active="request()->routeIs('pages.plan')">
                         {{ __('Plan du site') }}
                     </x-nav-link>
                     
@@ -115,8 +115,8 @@
                     {{ __('Tableau de bord') }}
                 </x-responsive-nav-link>
 
-                <x-responsive-nav-link :href="route('pages.edit')" :active="request()->routeIs('pages.edit')">
-                    {{ __('Editer') }}
+                <x-responsive-nav-link :href="route('pages.plan')" :active="request()->routeIs('pages.plan')">
+                    {{ __('Plan du site') }}
                 </x-responsive-nav-link>
             @endauth
             <x-responsive-nav-link :href="route('profile.edit')" :active="request()->routeIs('profile.edit')">
