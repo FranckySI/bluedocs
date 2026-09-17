@@ -24,16 +24,19 @@ Route::get('/documents', function(){
 // CRUD routes for documents
 Route::middleware('auth')->group(function(){
     Route::get('/documents/create', [DocumentController::class, 'create'])->name('documents.create');
-    Route::get('/documents/{document}/edit', [DocumentController::class, 'edit'])->name('documents.edit');
-    Route::put('/documents/{document}', [DocumentController::class, 'update'])->name('documents.update');
-    Route::delete('/documents/{document}', [DocumentController::class, 'destroy'])->name('documents.destroy');   
-
+    
+    // MODIFICATION : Ajout de :slug pour que Laravel sache qu'on utilise le slug dans l'URL
+    Route::get('/documents/{document:slug}/edit', [DocumentController::class, 'edit'])->name('documents.edit');
+    Route::put('/documents/{document:slug}', [DocumentController::class, 'update'])->name('documents.update');
+    Route::delete('/documents/{document:slug}', [DocumentController::class, 'destroy'])->name('documents.destroy');
 });
 
 // Routes for document listing and viewing
 Route::post('/documents', [DocumentController::class, 'store'])->name('documents.store');
 Route::get('/documents/{document}', [DocumentController::class, 'show'])->name('documents.show');
 Route::get('/documents', [DocumentController::class, 'index'])->name('pages.document');
+
+
 
 
 
