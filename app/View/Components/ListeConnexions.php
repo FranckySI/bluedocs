@@ -14,7 +14,7 @@ class ListeConnexions extends Component
     {
         $this->connexions = User::whereNotNull('last_login_at')
                                   ->orderByDesc('last_login_at')
-                                  ->take(10)
+                                  ->take(3)
                                   ->get();
     }
 

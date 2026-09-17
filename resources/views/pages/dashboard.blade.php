@@ -453,13 +453,42 @@
                 </table>
             </div>
 
+
             <!-- Connexions récentes -->
             <div class="bd-panel">
                 <div class="bd-panel-head">
                     <h2>Dernières connexions</h2>
                 </div>
 
-                <x-liste-connexions />
+                <ul class="bd-connexions">
+                    @foreach ($connexions as $c)
+                        <li>
+                            <!-- Génération dynamique de l'avatar (Prend les 2 premières lettres du nom en majuscules) -->
+                            <div class="bd-avatar"
+                                style="{{ $c->role === 'admin' ? '' : 'border-color:var(--bd-blue);' }}">
+                                {{ strtoupper(substr($c->name, 0, 2)) }}
+                            </div>
+
+                            <div class="bd-connexion-info">
+                                <div class="bd-connexion-name">{{ $c->name }}</div>
+                                <div class="bd-connexion-role">
+                                    {{ $c->role === 'admin' ? 'Administrateur' : 'Éditeur' }}
+                                </div>
+                            </div>
+
+                            <!-- Formatage de l'heure via Carbon (Affiche l'heure ou "Hier") -->
+                            <span class="bd-connexion-time">
+                                @if ($c->last_login_at->isToday())
+                                    Aujourd'hui, {{ $c->last_login_at->format('H:i') }}
+                                @elseif ($c->last_login_at->isYesterday())
+                                    Hier, {{ $c->last_login_at->format('H:i') }}
+                                @else
+                                    {{ $c->last_login_at->format('d/m H:i') }}
+                                @endif
+                            </span>
+                        </li>
+                    @endforeach
+                </ul>
 
                 </ul>
             </div>
