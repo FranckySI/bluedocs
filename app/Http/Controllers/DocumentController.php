@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Document; // Assurez-vous d'avoir créé le modèle Document
+use App\Models\Document; 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class DocumentController extends Controller
 {
@@ -15,39 +16,62 @@ class DocumentController extends Controller
         return view('pages.document', compact('documents'));
     }
 
-
-
-    // affiche le formulaire de création de document
     public function create()
     {
         return view('docs.create');
     }
 
-    // Enregistre un nouveau document dans la base de données
     public function store(Request $request)
     {
-        // Validation des données du formulaire
+        // Validation 
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
         ]);
 
-        // Sauvegarde du document dans la base de données
+        // Sauvegarde base de données
         Document::create([
-            'title' => $validated['title'],
-            'content' => $validated['content'], // <-- Plus aucune erreur dans l'éditeur !
-            'user_name' => Auth::user()->name,
-        ]);
+        'title' => $validated['title'],
+        'slug' => $request->input('slug') ?? Str::slug($validated['title']), 
+        'content' => $validated['content'],
+        'user_name' => Auth::user()->name,
+    ]);
 
-        // Redirection vers la page de liste des documents avec un message de succès
         return redirect()->route('pages.document')->with('success', 'Document créé avec succès !');
     }
 
-    // Affiche le détail d'un document spécifique
-    public function show(Document $document)
+    // Affiche le détail d'un doc
+    public function show($slug)
     {
-        return view('docs.show', compact('document'));
+        //  cherche le document par slug
+        $document = Document::where('slug', $slug)->first();
+
+        //  S'il n'existe pas dans MySQL, on prépare un document "virtuel"
+        if (!$document) {
+            $document = new Document();
+            $document->title = ucfirst(str_replace('-', ' ', $slug));
+            $document->slug = $slug;
+            // Ce contenu sera visible uniquement en mode lecture
+            $document->content = '
+            <div class="p-6 bg-amber-50 border border-amber-200 rounded-md text-amber-800 mb-4">
+                <strong>Ce document n\'existe pas encore.</strong><br>
+                Si vous avez les droits, vous pouvez le créer dès maintenant en cliquant sur le bouton "Créer ce document" ci-dessus.
+            </div>';
+            $document->user_name = Auth::user() ? Auth::user()->name : 'Système';
+
+            $document->is_new = true;
+        }
+
+        return view('docs.sommaire', compact('document'));
     }
+
+    public function showSommaire()
+    {
+        $document = Document::where('slug', 'sommaire')->firstOrFail();
+        return view('docs.sommaire', compact('document'));
+    }
+
+
 
     public function edit(Document $document)
     {
@@ -74,5 +98,4 @@ class DocumentController extends Controller
         $document->delete();
         return redirect()->route('pages.document')->with('success', 'Document supprimé avec succès !');
     }
-
 }

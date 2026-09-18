@@ -12,16 +12,16 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('pages.document')" :active="request()->routeIs('pages.document')">
-                        {{ __('Documents') }}
+                    <x-nav-link :href="route('docs.sommaire')" :active="request()->routeIs('docs.sommaire')">
+                        {{ __('Sommaire') }}
                     </x-nav-link>
 
 
                     <x-nav-link :href="route('pages.plan')" :active="request()->routeIs('pages.plan')">
                         {{ __('Plan du site') }}
                     </x-nav-link>
-                    
-                     @auth
+
+                    @auth
                         <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                             {{ __('Tableau de bord') }}
                         </x-nav-link>
@@ -66,14 +66,14 @@
                                 {{ __('Mon Profil') }}
                             </x-dropdown-link>
 
-                        
-                        <!-- Ajouter un utilisateur -->
-                        @can('create-users')
-                            <x-dropdown-link :href="route('register')">
-                                {{ __('Ajouter un utilisateur') }}
-                            </x-dropdown-link>
-                        @endcan
-                        <!-- Deconnexion -->
+
+                            <!-- Ajouter un utilisateur -->
+                            @can('create-users')
+                                <x-dropdown-link :href="route('register')">
+                                    {{ __('Ajouter un utilisateur') }}
+                                </x-dropdown-link>
+                            @endcan
+                            <!-- Deconnexion -->
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <x-dropdown-link :href="route('logout')"
@@ -106,8 +106,12 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('pages.document')" :active="request()->routeIs('pages.document')">
-                {{ __('Documents') }}
+            <x-responsive-nav-link :href="route('docs.sommaire')" :active="request()->routeIs('docs.sommaire')">
+                {{ __('Sommaire') }}
+            </x-responsive-nav-link>
+
+            <x-responsive-nav-link :href="route('pages.plan')" :active="request()->routeIs('pages.plan')">
+                {{ __('Plan du site') }}
             </x-responsive-nav-link>
 
             @auth
@@ -115,23 +119,20 @@
                     {{ __('Tableau de bord') }}
                 </x-responsive-nav-link>
 
-                <x-responsive-nav-link :href="route('pages.plan')" :active="request()->routeIs('pages.plan')">
-                    {{ __('Plan du site') }}
-                </x-responsive-nav-link>
-            @endauth
-            <x-responsive-nav-link :href="route('profile.edit')" :active="request()->routeIs('profile.edit')">
-                {{ __('Mon Profil') }}
-            </x-responsive-nav-link>
 
-            <x-responsive-nav-link :href="route('login')" :active="request()->routeIs('login')">
-                {{ __('Se connecter') }}
-            </x-responsive-nav-link>
+                
 
-            @auth
+
                 <x-responsive-nav-link :href="route('register')" :active="request()->routeIs('register')">
                     {{ __('Ajouter un utilisateur') }}
                 </x-responsive-nav-link>
             @endauth
+
+            @guest
+                <x-responsive-nav-link :href="route('login')" :active="request()->routeIs('login')">
+                    {{ __('Se connecter') }}
+                </x-responsive-nav-link>
+            @endguest
 
         </div>
 
@@ -169,7 +170,7 @@
                         <x-responsive-nav-link :href="route('logout')"
                             onclick="event.preventDefault();
                                         this.closest('form').submit();">
-                            {{ __('Log Out') }}
+                            {{ __('Se déconnecter') }}
                         </x-responsive-nav-link>
                     </form>
                 @endauth

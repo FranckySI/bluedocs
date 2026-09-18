@@ -12,6 +12,7 @@ class Document extends Model
     // Autorise Laravel à remplir ces colonnes d'un coup
     protected $fillable =[
         'title',
+        'slug',
         'content',
         'user_name',
     ];
