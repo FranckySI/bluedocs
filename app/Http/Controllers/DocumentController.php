@@ -37,7 +37,7 @@ class DocumentController extends Controller
         'user_name' => Auth::user()->name,
     ]);
 
-        return redirect()->route('pages.document')->with('success', 'Document créé avec succès !');
+        return redirect()->route('docs.sommaire')->with('success', 'Document créé avec succès !');
     }
 
     // Affiche le détail d'un doc

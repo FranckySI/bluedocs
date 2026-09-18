@@ -165,7 +165,7 @@
 
 
                     @auth
-                        @if(!request()->has('edit'))
+                        @if (!request()->has('edit'))
                             @if (isset($document->is_new) && $document->is_new)
                                 <!-- S'affiche si le doc n'existe pas en BDD -->
                                 <a class="bd-add-btn" href="?edit=1" style="background: var(--bd-blue-light);">
@@ -173,7 +173,7 @@
                                 </a>
                             @else
                                 <!-- S'affiche si le doc existe en BDD -->
-                                <a class="bd-add-btn" href="?edit=1"> 
+                                <a class="bd-add-btn" href="?edit=1">
                                     Modifier le document
                                 </a>
                             @endif
@@ -185,38 +185,47 @@
             <!--  Corps du Sommaire (Mode ÉDITION ou LECTURE) -->
             <div class="py-6 max-w-4xl mx-auto">
                 <div class="bd-wiki-content">
-                    
-                    @if(request()->has('edit') && auth()->check())
-                   
+
+                    @if (request()->has('edit') && auth()->check())
+
                         <!-- MODE ÉDITION / CRÉATION DIRECTE -->
-                    
-                        <form action="{{ isset($document->is_new) && $document->is_new ? route('documents.store') : route('documents.update', $document->slug) }}" method="POST">
+
+                        <form
+                            action="{{ isset($document->is_new) && $document->is_new ? route('documents.store') : route('documents.update', $document) }}"
+                            method="POST">
                             @csrf
-                            @if(!isset($document->is_new) || !$document->is_new)
+                            @if (!isset($document->is_new) || !$document->is_new)
                                 @method('PUT')
                             @endif
+
 
                             <!-- Slug caché pour la création à la volée -->
                             <input type="hidden" name="slug" value="{{ $document->slug }}">
 
                             <!-- Titre -->
                             <div style="margin-bottom: 1.5rem;">
-                                <label for="title" style="display: block; font-size: 14px; font-weight: 600; margin-bottom: 0.5rem;">Titre du document :</label>
-                                <input type="text" id="title" name="title" value="{{ $document->title }}" required 
+                                <label for="title"
+                                    style="display: block; font-size: 14px; font-weight: 600; margin-bottom: 0.5rem;">Titre
+                                    du document :</label>
+                                <input type="text" id="title" name="title" value="{{ $document->title }}"
+                                    required
                                     style="width: 100%; border: 1px solid #cbd5e1; padding: 10px; border-radius: 4px;">
                             </div>
 
                             <!-- Éditeur TinyMCE -->
                             <div style="margin-bottom: 1.5rem;">
-                                <label for="mon-editeur" style="display: block; font-size: 14px; font-weight: 600; margin-bottom: 0.5rem;">Contenu :</label>
+                                <label for="mon-editeur"
+                                    style="display: block; font-size: 14px; font-weight: 600; margin-bottom: 0.5rem;">Contenu
+                                    :</label>
                                 <textarea id="mon-editeur" name="content">{!! isset($document->is_new) && $document->is_new ? '' : $document->content !!}</textarea>
                             </div>
 
                             <!-- Actions -->
                             <div style="display: flex; justify-content: flex-end; gap: 10px;">
-                                <a href="{{ isset($document->is_new) && $document->is_new ? route('docs.sommaire') : route('documents.show', $document->slug) }}" class="bd-back-btn">Annuler</a>
-                                <button type="submit" class="bd-add-btn" style="background: #10b981;">Enregistrer</button>
-                            </div>
+        <!-- Si c'est un nouveau doc virtuel, annuler revient à l'historique précédent (votre sommaire) -->
+        <a href="{{ isset($document->is_new) && $document->is_new ? 'javascript:history.back()' : route('documents.show', $document) }}" class="bd-back-btn">Annuler</a>
+        <button type="submit" class="bd-add-btn" style="background: #10b981;">Enregistrer</button>
+    </div>
                         </form>
                     @else
                         <!-- MODE LECTURE (Par défaut) -->
@@ -229,8 +238,8 @@
             </div>
         </div>
 
-               <!--  Script TinyMCE (Appelé uniquement si ?edit=1) -->
-        @if(request()->has('edit') && auth()->check())
+        <!--  Script TinyMCE (Appelé uniquement si ?edit=1) -->
+        @if (request()->has('edit') && auth()->check())
             <x-slot name="scripts">
                 <script src="{{ asset('js/tinymce/tinymce.min.js') }}"></script>
                 <script>
@@ -243,18 +252,14 @@
                             plugins: 'advlist autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table help wordcount',
                             toolbar: 'undo redo | blocks | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table link image | removeformat | help',
                             content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }',
-                            relative_urls: false, 
-                            remove_script_host: true, 
+                            relative_urls: false,
+                            remove_script_host: true,
                             convert_urls: false
-                        }); // <-- Fermeture propre de tinymce.init
-                    }); // <-- Fermeture propre de l'événement DOMContentLoaded
+                        });
+                    });
                 </script>
             </x-slot>
         @endif
 
     </body>
 </x-app-layout>
-
-               
-        
-    
