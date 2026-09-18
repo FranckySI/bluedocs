@@ -86,6 +86,8 @@
             border-radius: 4px;
             transition: background .2s ease;
             white-space: nowrap;
+            border: none;
+            cursor: pointer;
         }
 
         .bd-add-btn:hover,
@@ -93,56 +95,19 @@
             background: var(--bd-red-dark);
         }
 
-        /* ---------- Nouveau : Style de la Liste des Documents ---------- */
-        .bd-table-container {
-            background: var(--bd-white);
-            border-radius: 8px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-            overflow: hidden;
-            margin-top: 20px;
-        }
-
-        .bd-table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-        }
-
-        .bd-table th {
-            background: var(--bd-blue-dark);
-            color: var(--bd-white);
-            font-family: var(--bd-font-mono);
-            font-size: 13px;
-            letter-spacing: 1px;
-            padding: 16px 24px;
-            text-transform: uppercase;
-        }
-
-        .bd-table td {
-            padding: 18px 24px;
-            border-bottom: 1px solid #eef2f6;
-            font-size: 15px;
-        }
-
-        .bd-table tr:last-child td {
-            border-bottom: none;
-        }
-
-        .bd-doc-title-link {
-            color: var(--bd-blue);
+        /* Style pour bouton secondaire Annuler */
+        .bd-btn-cancel {
+            background: #e2e8f0;
+            color: #475569;
+            padding: 12px 20px;
+            border-radius: 4px;
+            font-size: 14px;
             font-weight: 600;
             text-decoration: none;
+            transition: background .2s;
         }
-
-        .bd-doc-title-link:hover {
-            color: var(--bd-blue-light);
-            text-decoration: underline;
-        }
-
-        .bd-doc-date {
-            font-family: var(--bd-font-mono);
-            font-size: 13px;
-            color: var(--bd-muted);
+        .bd-btn-cancel:hover {
+            background: #cbd5e1;
         }
 
         /* Actions buttons */
@@ -151,78 +116,126 @@
             gap: 12px;
             justify-content: flex-end;
         }
-
-        .bd-btn-action {
-            font-size: 13px;
-            font-weight: 600;
-            text-decoration: none;
-            padding: 6px 12px;
-            border-radius: 4px;
-            transition: all 0.2s ease;
-            background: none;
-            border: none;
-            cursor: pointer;
-        }
-
-        .bd-btn-edit {
-            color: var(--bd-blue-light);
-            border: 1px solid var(--bd-blue-light);
-        }
-
-        .bd-btn-edit:hover {
-            background: var(--bd-blue-light);
-            color: var(--bd-white);
-        }
-
-        .bd-btn-delete {
-            color: var(--bd-red);
-            border: 1px solid var(--bd-red);
-        }
-
-        .bd-btn-delete:hover {
-            background: var(--bd-red);
-            color: var(--bd-white);
-        }
-
-        /* État vide */
-        .bd-empty-state {
-            padding: 60px;
-            text-align: center;
-            color: var(--bd-muted);
-            font-size: 16px;
-        }
     </style>
 
     <div class="bd-docs">
-        <!-- ===== En-tête ===== -->
+        <!-- En-tête -->
         <div class="bd-docs-head">
             <div>
-                <span class="bd-eyebrow-dark">GESTION DOCUMENTAIRE</span>
-                <h1 class="bd-docs-title">Tous les <span class="accent">documents</span></h1>
-                <p class="bd-docs-sub">Consultez, modifiez ou supprimez les documents classés par catégorie.</p>
+                <span class="bd-eyebrow-dark">DOCUMENTATION MODE LECTURE</span>
+                <h1 class="bd-docs-title" id="page-main-title">Document : <span class="accent">{{ $document->title }}</span></h1>
+                <p class="bd-docs-sub">Consultez le document ou passez en mode édition à l'aide du bouton.</p>
             </div>
-            @auth
-                <a class="bd-add-btn" href="{{ route('pages.document') }}">Retour</a>
-            @endauth
+            <div class="flex gap-2">
+                @auth
+                    <button type="button" id="btn-toggle-edit" class="bd-add-btn">
+                         Modifier ce document
+                    </button>
+                @endauth
+                <a class="bd-btn-cancel" href="{{ route('docs.sommaire') }}">Retour</a>
+            </div>
         </div>
 
-        <!-- ===== Liste des documents ===== -->
-    <div class="py-12 max-w-4xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white p-6 rounded-lg shadow">
-            <h1 class="text-3xl font-bold mb-6 text-gray-900">{{ $document->title }}</h1>
-            <p class="text-sm text-gray-500 mb-4">Créé par : {{ $document->user_name }} le {{ $document->created_at->format('d/m/Y H:i') }}</p>
+        <!--  Vue principale -->
+        <div class="py-12 max-w-4xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white p-6 rounded-lg shadow">
+                
+                <!-- AFFICHAGE CLASSIQUE -->
+                <div id="wrapper-view-mode">
+                    <h1 class="text-3xl font-bold mb-6 text-gray-900">{{ $document->title }}</h1>
+                    <p class="text-sm text-gray-500 mb-4">Créé par : {{ $document->user_name }} le {{ $document->created_at->format('d/m/Y H:i') }}</p>
 
-            <!-- L'affichage du contenu HTML de TinyMCE -->
-            <div class="prose max-w-none text-gray-800">
-                {!! $document->content !!}
+                    <div class="prose max-w-none text-gray-800">
+                        {!! $document->content !!}
+                    </div>
+                </div>
+
+                <!-- FORMULAIRE D'ÉDITION DIRECTE (Caché par défaut) -->
+                <div id="wrapper-edit-mode" style="display: none;">
+                    <form action="{{ route('documents.update', $document->slug) }}" method="POST">
+                        @csrf
+                        @method('PUT')
+
+                        <div class="mb-4">
+                            <label for="title" class="block text-sm font-medium text-gray-700 mb-2">Titre du document :</label>
+                            <input type="text" id="title" name="title" value="{{ $document->title }}" required
+                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                        </div>
+
+                        <!-- TinyMCE modif -->
+                        <div class="mb-6">
+                            <label for="mon-editeur" class="block text-sm font-medium text-gray-700 mb-2">Contenu :</label>
+                            <textarea id="mon-editeur" name="content">{!! $document->content !!}</textarea>
+                        </div>
+
+                        <div class="flex justify-end gap-3">
+                            <button type="button" id="btn-cancel-edit" class="bd-btn-cancel">Annuler</button>
+                            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded shadow">
+                                Enregistrer les modifications
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
             </div>
         </div>
     </div>
 
+    <!-- Injection des scripts et gestion de TinyMCE -->
+    <x-slot name="scripts">
+        <script src="{{ asset('js/tinymce/tinymce.min.js') }}"></script>
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                // Initialisation silencieuse de TinyMCE
+                tinymce.init({
+                    selector: '#mon-editeur',
+                    license_key: 'gpl',
+                    language: 'fr_FR',
+                    height: 500,
+                    plugins: 'advlist autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table help wordcount',
+                    toolbar: 'undo redo | blocks | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table link image | removeformat | help',
+                    content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }',
+                    relative_urls: false, 
+                    remove_script_host: true, 
+                    convert_urls: false
+                });
 
-    </div>
+                // Éléments HTML
+                const btnToggle = document.getElementById('btn-toggle-edit');
+                const btnCancel = document.getElementById('btn-cancel-edit');
+                const viewMode = document.getElementById('wrapper-view-mode');
+                const editMode = document.getElementById('wrapper-edit-mode');
+                const badgeTitle = document.querySelector('.bd-eyebrow-dark');
+
+                // Fonction pour basculer en mode édition
+                if(btnToggle) {
+                    btnToggle.addEventListener('click', function() {
+                        if (editMode.style.display === 'none') {
+                            editMode.style.display = 'block';
+                            viewMode.style.display = 'none';
+                            btnToggle.style.display = 'none'; // Cache le bouton modifier pendant l'édition
+                            badgeTitle.textContent = "DOCUMENTATION MODE ÉDITION";
+                            badgeTitle.style.color = "var(--bd-red)";
+                            badgeTitle.style.borderColor = "var(--bd-red)";
+                        }
+                    });
+                }
+
+                // Fonction pour annuler et revenir au mode lecture
+                if(btnCancel) {
+                    btnCancel.addEventListener('click', function() {
+                        editMode.style.display = 'none';
+                        viewMode.style.display = 'block';
+                        btnToggle.style.display = 'inline-flex';
+                        badgeTitle.textContent = "DOCUMENTATION MODE LECTURE";
+                        badgeTitle.style.color = "var(--bd-blue)";
+                        badgeTitle.style.borderColor = "var(--bd-blue)";
+                    });
+                }
+            });
+        </script>
+    </x-slot>
 
 </body>
-
-
 </x-app-layout>

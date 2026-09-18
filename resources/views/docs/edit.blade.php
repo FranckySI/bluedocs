@@ -36,7 +36,7 @@
 
                     <!-- Bouton de validation -->
                     <div class="flex justify-end gap-4">
-                        <a href="{{ route('pages.document') }}" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded shadow text-decoration-none">
+                        <a href="{{ route('docs.sommaire') }}" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded shadow text-decoration-none">
                             Annuler
                         </a>
                         <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded shadow">

@@ -10,7 +10,7 @@ class Document extends Model
     use HasFactory;
 
     // Autorise Laravel à remplir ces colonnes d'un coup
-    protected $fillable =[
+    protected $fillable = [
         'title',
         'slug',
         'content',
@@ -18,10 +18,14 @@ class Document extends Model
     ];
 
     public function resolveRouteBinding($value, $field = null)
-{
-    return $this->where('id', $value)
-                ->orWhere('slug', $value)
-                ->firstOrFail();
-}
+    {
+        return $this->where('id', $value)
+            ->orWhere('slug', $value)
+            ->firstOrFail();
+    }
 
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
 }
