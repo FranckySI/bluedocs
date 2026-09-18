@@ -90,7 +90,7 @@ class DocumentController extends Controller
         $document->update($validated);
 
         // Redirection vers la page de liste des documents avec un message de succès
-        return redirect()->route('pages.document')->with('success', 'Document mis à jour avec succès !');
+        return redirect()->route('docs.sommaire')->with('success', 'Document mis à jour avec succès !');
     }
 
     public function destroy(Document $document)
