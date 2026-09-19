@@ -188,7 +188,7 @@
 
                     @if (request()->has('edit') && auth()->check())
 
-                        <!-- MODE ÉDITION / CRÉATION DIRECTE -->
+                        <!-- MODE ÉDITION -->
 
                         <form
                             action="{{ isset($document->is_new) && $document->is_new ? route('documents.store') : route('documents.update', $document) }}"
@@ -222,10 +222,12 @@
 
                             <!-- Actions -->
                             <div style="display: flex; justify-content: flex-end; gap: 10px;">
-        <!-- Si c'est un nouveau doc virtuel, annuler revient à l'historique précédent (votre sommaire) -->
-        <a href="{{ isset($document->is_new) && $document->is_new ? 'javascript:history.back()' : route('documents.show', $document) }}" class="bd-back-btn">Annuler</a>
-        <button type="submit" class="bd-add-btn" style="background: #10b981;">Enregistrer</button>
-    </div>
+                                <!-- Si c'est un nouveau doc virtuel, annuler revient à l'historique précédent -->
+                                <a href="{{ isset($document->is_new) && $document->is_new ? 'javascript:history.back()' : route('documents.show', $document) }}"
+                                    class="bd-back-btn">Annuler</a>
+                                <button type="submit" class="bd-add-btn"
+                                    style="background: #10b981;">Enregistrer</button>
+                            </div>
                         </form>
                     @else
                         <!-- MODE LECTURE (Par défaut) -->
@@ -238,7 +240,7 @@
             </div>
         </div>
 
-        <!--  Script TinyMCE (Appelé uniquement si ?edit=1) -->
+        <!-- TinyMCE -->
         @if (request()->has('edit') && auth()->check())
             <x-slot name="scripts">
                 <script src="{{ asset('js/tinymce/tinymce.min.js') }}"></script>
