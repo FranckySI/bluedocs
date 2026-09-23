@@ -1,31 +1,44 @@
-<x-app-layout>  
+<x-app-layout>
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                
+
                 <h1 class="text-2xl font-bold mb-6">Modifier le document : {{ $document->titre }}</h1>
 
                 @if ($errors->any())
-    <div style="background-color: #fee2e2; border: 1px solid #ef4444; color: #b91c1c; padding: 1rem; border-radius: 0.375rem; margin-bottom: 1.5rem;">
-        <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
+                    <div
+                        style="background-color: #fee2e2; border: 1px solid #ef4444; color: #b91c1c; padding: 1rem; border-radius: 0.375rem; margin-bottom: 1.5rem;">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
 
+
+                <!-- NOUVEAU : Zone d'importation de fichier Word local -->
+                <div class="mb-6 p-4 bg-gray-50 border border-gray-200 rounded-md">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Importer un fichier Word (.docx)
+                    </label>
+                    <input type="file" id="word-import" accept=".docx"
+                        class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" />
+                </div>
 
 
                 <!-- Formulaire de modification -->
                 <form action="{{ route('documents.update', $document->id) }}" method="POST">
                     @csrf
                     @method('PUT')
-                    
+
                     <!-- Champ Titre pré-rempli -->
                     <div class="mb-4">
-                        <label for="titre" class="block text-sm font-medium text-gray-700 mb-2">Titre du document :</label>
-                        <input type="text" id="titre" name="title" value="{{ old('title', $document->title) }}" required class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                        <label for="titre" class="block text-sm font-medium text-gray-700 mb-2">Titre du document
+                            :</label>
+                        <input type="text" id="titre" name="title" value="{{ old('title', $document->title) }}"
+                            required
+                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                     </div>
 
                     <!-- Zone TinyMCE pré-remplie -->
@@ -36,10 +49,12 @@
 
                     <!-- Bouton de validation -->
                     <div class="flex justify-end gap-4">
-                        <a href="{{ route('pages.document') }}" class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded shadow text-decoration-none">
+                        <a href="{{ route('pages.document') }}"
+                            class="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded shadow text-decoration-none">
                             Annuler
                         </a>
-                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-black font-bold py-2 px-4 rounded shadow">
+                        <button type="submit"
+                            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow">
                             Enregistrer les modifications
                         </button>
                     </div>
@@ -56,14 +71,14 @@
             document.addEventListener("DOMContentLoaded", function() {
                 tinymce.init({
                     selector: '#mon-editeur',
-                    license_key:'gpl',
+                    license_key: 'gpl',
                     language: 'fr_FR',
                     height: 500,
                     plugins: 'advlist autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table code help wordcount',
                     toolbar: 'undo redo | blocks | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table link image | removeformat | help',
                     content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }',
-                    setup: function (editor) {
-                        editor.on('change', function () {
+                    setup: function(editor) {
+                        editor.on('change', function() {
                             editor.save();
                         });
                     }
@@ -71,7 +86,8 @@
             });
         </script>
 
-        
+        <!-- 3. Script d'import Mammoth (compilé par Vite) -->
+        @vite(['resources/js/word-import.js'])
 
 
     </x-slot>

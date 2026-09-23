@@ -158,7 +158,18 @@
                     </span>
                     <h1 class="bd-docs-title">{{ $document->title }}</h1>
                     <p class="bd-docs-sub">Cliquez sur une section pour ouvrir directement la documentation associée.</p>
+                    <p>
+                        <x-last-modif :document="$document" />
+                    </p>
                 </div>
+
+                <div>
+    
+</div>
+
+
+
+
                 <div style="display: flex; gap: 10px;">
                     <!-- Lien vers les archives / dashboard global -->
                     <a class="bd-back-btn" href="javascript:history.back()">Retour</a>
@@ -187,6 +198,17 @@
                 <div class="bd-wiki-content">
 
                     @if (request()->has('edit') && auth()->check())
+
+
+                        <!-- NOUVEAU : Zone d'importation de fichier Word local -->
+                        <div class="mb-6 p-4 bg-gray-50 border border-gray-200 rounded-md">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Importer un fichier Word (.docx)
+                            </label>
+                            <input type="file" id="word-import" accept=".docx"
+                                class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" />
+                        </div>
+
 
                         <!-- MODE ÉDITION / CRÉATION DIRECTE -->
 
@@ -222,10 +244,12 @@
 
                             <!-- Actions -->
                             <div style="display: flex; justify-content: flex-end; gap: 10px;">
-        <!-- Si c'est un nouveau doc virtuel, annuler revient à l'historique précédent (votre sommaire) -->
-        <a href="{{ isset($document->is_new) && $document->is_new ? 'javascript:history.back()' : route('documents.show', $document) }}" class="bd-back-btn">Annuler</a>
-        <button type="submit" class="bd-add-btn" style="background: #10b981;">Enregistrer</button>
-    </div>
+                                <!-- Si c'est un nouveau doc virtuel, annuler revient à l'historique précédent (votre sommaire) -->
+                                <a href="{{ isset($document->is_new) && $document->is_new ? 'javascript:history.back()' : route('documents.show', $document) }}"
+                                    class="bd-back-btn">Annuler</a>
+                                <button type="submit" class="bd-add-btn"
+                                    style="background: #10b981;">Enregistrer</button>
+                            </div>
                         </form>
                     @else
                         <!-- MODE LECTURE (Par défaut) -->
@@ -249,7 +273,7 @@
                             license_key: 'gpl',
                             language: 'fr_FR',
                             height: 500,
-                            plugins: 'advlist autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table help wordcount',
+                            plugins: 'advlist  autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table help wordcount ',
                             toolbar: 'undo redo | blocks | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table link image | removeformat | help',
                             content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }',
                             relative_urls: false,
@@ -258,8 +282,11 @@
                         });
                     });
                 </script>
+
+                @vite(['resources/js/word-import.js'])
             </x-slot>
         @endif
+
 
     </body>
 </x-app-layout>

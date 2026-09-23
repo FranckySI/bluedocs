@@ -396,7 +396,7 @@
                 @endphp
                 <tr>
                     <td>
-                        <a href="{{ route('documents.show', $m->id) }}" class="bd-doc-name" style="text-decoration: none; color: inherit; font-weight: 600;">
+                        <a href="{{ route('documents.show', $m->slug) }}" class="bd-doc-name" style="text-decoration: none; color: inherit; font-weight: 600;">
                             {{ $m->title }}
                         </a>
                         <span class="bd-doc-meta">Document texte</span>

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Document; 
+use App\Models\Document;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
@@ -31,11 +31,11 @@ class DocumentController extends Controller
 
         // Sauvegarde base de données
         Document::create([
-        'title' => $validated['title'],
-        'slug' => $request->input('slug') ?? Str::slug($validated['title']), 
-        'content' => $validated['content'],
-        'user_name' => Auth::user()->name,
-    ]);
+            'title' => $validated['title'],
+            'slug' => $request->input('slug') ?? Str::slug($validated['title']),
+            'content' => $validated['content'],
+            'user_name' => Auth::user()->name,
+        ]);
 
         return redirect()->route('docs.sommaire')->with('success', 'Document créé avec succès !');
     }
@@ -86,12 +86,18 @@ class DocumentController extends Controller
             'content' => 'required|string',
         ]);
 
+        // On prépare les données à sauvegarder
+        $data = $validated;
+        $data['updated_by'] = Auth::id();   // Enregistre l'ID (Utile pour la relation Eloquent)
+        $data['user_name']  = Auth::user()->name; // Écrase l'ancien nom par celui du modificateur
+
         // Mise à jour du document dans la base de données
-        $document->update($validated);
+        $document->update($data);
 
         // Redirection vers la page de liste des documents avec un message de succès
         return redirect()->route('docs.sommaire')->with('success', 'Document mis à jour avec succès !');
     }
+
 
     public function destroy(Document $document)
     {

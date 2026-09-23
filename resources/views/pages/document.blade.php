@@ -215,7 +215,7 @@
                     @forelse ($documents as $document)
                         <tr>
                             <td>
-                                <a href="{{ route('documents.show', $document->id) }}" class="bd-doc-title-link">
+                                <a href="{{ route('documents.show', $document->slug) }}" class="bd-doc-title-link">
                                     {{ $document->title }}
                                 </a>
                             </td>
