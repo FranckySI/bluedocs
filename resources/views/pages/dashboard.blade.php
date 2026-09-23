@@ -367,70 +367,72 @@
 
             <!-- Dernières modifications -->
             <div class="bd-panel">
-    <div class="bd-panel-head">
-        <h2>Dernières modifications</h2>
-        <a href="{{ route('pages.document') }}">Voir tout</a>
-    </div>
-    <table class="bd-table">
-        <thead>
-            <tr>
-                <th>Document</th>
-                <th>Action</th>
-                <th>Utilisateur</th>
-                <th>Date</th>
-            </tr>
-        </thead>
-        <tbody>
-            @forelse ($recentDocuments as $m)
-                @php
-                    // Extraction rapide des initiales de l'utilisateur pour l'avatar mini
-                    $words = explode(' ', $m->user_name ?? 'Anonyme');
-                    $initials = '';
-                    foreach ($words as $w) {
-                        $initials .= mb_substr($w, 0, 1);
-                    }
-                    $initials = mb_strtoupper(mb_substr($initials, 0, 2));
+                <div class="bd-panel-head">
+                    <h2>Dernières modifications</h2>
+                    <a href="{{ route('pages.document') }}">Voir tout</a>
+                </div>
+                <table class="bd-table">
+                    <thead>
+                        <tr>
+                            <th>Document</th>
+                            <th>Action</th>
+                            <th>Utilisateur</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($recentDocuments as $m)
+                            @php
+                                // Extraction rapide des initiales de l'utilisateur pour l'avatar mini
+                                $words = explode(' ', $m->user_name ?? 'Anonyme');
+                                $initials = '';
+                                foreach ($words as $w) {
+                                    $initials .= mb_substr($w, 0, 1);
+                                }
+                                $initials = mb_strtoupper(mb_substr($initials, 0, 2));
 
-                    // Détection de l'action (Ajout vs Modification)
-                    $isNew = $m->created_at == $m->updated_at;
-                @endphp
-                <tr>
-                    <td>
-                        <a href="{{ route('documents.show', $m->slug) }}" class="bd-doc-name" style="text-decoration: none; color: inherit; font-weight: 600;">
-                            {{ $m->title }}
-                        </a>
-                        <span class="bd-doc-meta">Document texte</span>
-                    </td>
-                    <td>
-                        @if($isNew)
-                            <span class="bd-badge add">Ajout</span>
-                        @else
-                            <span class="bd-badge edit">Modification</span>
-                        @endif
-                    </td>
-                    <td>
-                        <div class="bd-user-cell">
-                            <div class="bd-mini-avatar" style="background: {{ $isNew ? 'var(--bd-blue)' : 'var(--bd-red)' }};">
-                                {{ $initials }}
-                            </div> 
-                            {{ $m->user_name ?? 'Anonyme' }}
-                        </div>
-                    </td>
-                    <td>
-                        <!-- Affiche la date proprement -->
-                        {{ $m->updated_at->format('d/m/Y, H:i') }}
-                    </td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="4" style="text-align: center; padding: 30px; color: var(--bd-muted);">
-                        Aucune activité récente.
-                    </td>
-                </tr>
-            @endforelse
-        </tbody>
-    </table>
-</div>
+                                // Détection de l'action (Ajout vs Modification)
+                                $isNew = $m->created_at == $m->updated_at;
+                            @endphp
+                            <tr>
+                                <td>
+                                    <a href="{{ route('documents.show', $m->slug) }}" class="bd-doc-name"
+                                        style="text-decoration: none; color: inherit; font-weight: 600;">
+                                        {{ $m->title }}
+                                    </a>
+                                    <span class="bd-doc-meta">Document texte</span>
+                                </td>
+                                <td>
+                                    @if ($isNew)
+                                        <span class="bd-badge add">Ajout</span>
+                                    @else
+                                        <span class="bd-badge edit">Modification</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <div class="bd-user-cell">
+                                        <div class="bd-mini-avatar"
+                                            style="background: {{ $isNew ? 'var(--bd-blue)' : 'var(--bd-red)' }};">
+                                            {{ $initials }}
+                                        </div>
+                                        {{ $m->user_name ?? 'Anonyme' }}
+                                    </div>
+                                </td>
+                                <td>
+                                    <!-- Affiche la date proprement -->
+                                    {{ $m->updated_at->format('d/m/Y, H:i') }}
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="4" style="text-align: center; padding: 30px; color: var(--bd-muted);">
+                                    Aucune activité récente.
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
 
 
             <!-- Connexions récentes -->
