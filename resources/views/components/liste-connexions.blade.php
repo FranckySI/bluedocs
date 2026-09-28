@@ -59,7 +59,7 @@
 </style>
 
 <ul class="bd-connexions">
-    @foreach ($connexions as $c)
+    @foreach ($connexions->take(2) as $c)
         <li>
             <!-- Génération dynamique de l'avatar (Prend les 2 premières lettres du nom en majuscules) -->
             <div class="bd-avatar" style="{{ $c->role === 'admin' ? '' : 'border-color:var(--bd-blue);' }}">

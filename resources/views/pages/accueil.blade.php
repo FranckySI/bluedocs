@@ -1,6 +1,5 @@
 <x-app-layout>
 
-
     <style>
         :root {
             /* --- Charte graphique BlueDocs --- */
@@ -37,7 +36,6 @@
             padding: 90px 40px 60px;
             clip-path: polygon(0 0, 100% 0, 100% calc(100% - 28px), calc(100% - 28px) 100%, 0 100%);
         }
-
 
         .bd-hero-inner {
             position: relative;
@@ -80,7 +78,6 @@
             line-height: 1.6;
         }
 
-
         /* Journal d'activité en direct — élément signature */
         .bd-activity {
             position: relative;
@@ -116,17 +113,9 @@
         }
 
         @keyframes bd-pulse {
-            0% {
-                box-shadow: 0 0 0 0 rgba(204, 0, 51, 0.5);
-            }
-
-            70% {
-                box-shadow: 0 0 0 8px rgba(204, 0, 51, 0);
-            }
-
-            100% {
-                box-shadow: 0 0 0 0 rgba(204, 0, 51, 0);
-            }
+            0%   { box-shadow: 0 0 0 0 rgba(204, 0, 51, 0.5); }
+            70%  { box-shadow: 0 0 0 8px rgba(204, 0, 51, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(204, 0, 51, 0); }
         }
 
         .bd-activity ul {
@@ -195,34 +184,25 @@
             margin-bottom: 6px;
         }
 
-        .bd-roles {
-            display: flex;
-            gap: 14px;
-            margin-top: 8px;
+        /* ---------- ANIMATIONS ---------- */
+        .bd-js .bd-anim {
+            opacity: 0;
+            transform: translateY(16px);
+            transition: opacity .6s ease, transform .6s cubic-bezier(.2, .7, .2, 1);
+            will-change: opacity, transform;
         }
 
-        .bd-role {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            font-size: 12px;
-            color: var(--bd-muted);
+        .bd-js .bd-anim.is-in {
+            opacity: 1;
+            transform: none;
         }
 
-        .bd-role-badge {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: var(--bd-font-display);
-            font-weight: 700;
-            font-size: 13px;
-            color: var(--bd-white);
-            border: 2px solid var(--bd-red);
-            background: rgba(204, 0, 51, 0.12);
+        @media (prefers-reduced-motion: reduce) {
+            .bd-js .bd-anim {
+                opacity: 1;
+                transform: none;
+                transition: none;
+            }
         }
 
         @media (max-width:820px) {
@@ -239,21 +219,19 @@
 
     <section class="bd-hero">
         <div class="bd-hero-inner">
-            <span class="bd-eyebrow">INTRANET · GESTION DOCUMENTAIRE</span>
+            <span class="bd-eyebrow bd-anim">INTRANET · GESTION DOCUMENTAIRE</span>
 
-            <h1 class="bd-title">
+            <h1 class="bd-title bd-anim">
                 Gérez les documents<br>
-                facilement avec<br>
-                <span class="accent">BlueDocs</span>
+                <span class="accent">facilement</span>
             </h1>
 
-            <p class="bd-subtitle">
+            <p class="bd-subtitle bd-anim">
                 Déposez, classez et retrouvez vos documents en quelques secondes.
                 Chaque ajout, modification ou suppression est tracé automatiquement.
             </p>
 
-
-            <div class="bd-activity">
+            <div class="bd-activity bd-anim">
                 <div class="bd-activity-head"><span class="bd-dot"></span> JOURNAL D'ACTIVITÉ EN DIRECT</div>
                 <x-liste-connexions />
             </div>
@@ -262,41 +240,46 @@
 
     <div class="bd-cards">
 
-        <div class="bd-card">
+        <div class="bd-card bd-anim">
             <svg class="bd-card-icon" width="40" height="40" viewBox="0 0 40 40" fill="none">
                 <rect x="9" y="4" width="18" height="24" rx="2" stroke="#cc0033" stroke-width="2" />
-                <rect x="13" y="8" width="18" height="24" rx="2" fill="#00111f" stroke="#ffffff"
-                    stroke-width="2" />
+                <rect x="13" y="8" width="18" height="24" rx="2" fill="#00111f" stroke="#ffffff" stroke-width="2" />
                 <line x1="17" y1="14" x2="27" y2="14" stroke="#cc0033" stroke-width="1.6" />
-                <line x1="17" y1="19" x2="27" y2="19" stroke="#ffffff" stroke-width="1.2"
-                    opacity="0.5" />
-                <line x1="17" y1="24" x2="24" y2="24" stroke="#ffffff" stroke-width="1.2"
-                    opacity="0.5" />
+                <line x1="17" y1="19" x2="27" y2="19" stroke="#ffffff" stroke-width="1.2" opacity="0.5" />
+                <line x1="17" y1="24" x2="24" y2="24" stroke="#ffffff" stroke-width="1.2" opacity="0.5" />
             </svg>
             <h3>BlueDocs — Gestion documentaire</h3>
-            <p>Une bibliothèque centralisée pour toute l'entreprise : dépôt, mise à jour et suppression des documents,
-                avec un historique complet de chaque action.</p>
+            <p>Une bibliothèque centralisée pour toute l'entreprise : dépôt, mise à jour et suppression des documents, avec un historique complet de chaque action.</p>
         </div>
 
-        <div class="bd-card">
-            <h3>3 rôles, un accès adapté</h3>
-            <p>Chaque utilisateur voit exactement ce dont il a besoin, sans exposer d'informations sensibles aux
-                visiteurs.</p>
-            <div class="bd-roles">
-                <div class="bd-role">
-                    <div class="bd-role-badge">AD</div>Admin
-                </div>
-                <div class="bd-role">
-                    <div class="bd-role-badge">ED</div>Editeur
-                </div>
-                <div class="bd-role">
-                    <div class="bd-role-badge">VI</div>Visiteur
-                </div>
-            </div>
+        <div class="bd-card bd-anim">
+            <svg class="bd-card-icon" width="40" height="40" viewBox="0 0 40 40" fill="none">
+                <circle cx="20" cy="20" r="14" stroke="#cc0033" stroke-width="2"/>
+                <path d="M20 10v10l6 4" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <h3>Traçabilité en temps réel</h3>
+            <p>Suivez les modifications en un coup d'œil. Le journal d'activité intégré vous permet de savoir instantanément qui a consulté ou modifié un document d'entreprise.</p>
         </div>
 
     </div>
 
+    <!-- Script d'activation des animations au scroll -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.body.classList.add('bd-js');
 
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-in');
+                    }
+                });
+            }, {
+                threshold: 0.5
+            });
+
+            document.querySelectorAll('.bd-anim').forEach(el => observer.observe(el));
+        });
+    </script>
 
 </x-app-layout>
