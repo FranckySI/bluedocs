@@ -347,12 +347,35 @@
                 padding: 30px 20px 60px;
             }
         }
+
+         /* ---------- STRUCTURES ANIMATIONS ---------- */
+        .bd-js .bd-anim {
+            opacity: 0;
+            transform: translateY(16px);
+            transition: opacity .6s ease, transform .6s cubic-bezier(.2, .7, .2, 1);
+            will-change: opacity, transform;
+        }
+
+        .bd-js .bd-anim.is-in {
+            opacity: 1;
+            transform: none;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .bd-js .bd-anim {
+                opacity: 1;
+                transform: none;
+                transition: none;
+            }
+        }
+
+
     </style>
 
-    <div class="bd-dash">
+    <div class="bd-dash bd-anim">
 
         <!-- ===== En-tête ===== -->
-        <div class="bd-dash-head">
+        <div class="bd-dash-head bd-anim">
             <div>
                 <span class="bd-eyebrow-dark">TABLEAU DE BORD</span>
                 <h1 class="bd-dash-title">Bonjour, <span class="accent">{{ Auth::user()->name }}</span></h1>
@@ -476,7 +499,26 @@
 
         </div>
     </div>
-    </body>
+
+    <!-- Script d'activation des animations au scroll -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.body.classList.add('bd-js');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-in');
+                    }
+                });
+            }, {
+                threshold: 0.5
+            });
+
+            document.querySelectorAll('.bd-anim').forEach(el => observer.observe(el));
+        });
+    </script>
+
 
 
 

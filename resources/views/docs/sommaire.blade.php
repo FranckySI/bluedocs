@@ -117,7 +117,7 @@
 
             /* ---------- Contenu du Sommaire ---------- */
             .bd-wiki-content {
-                background: var(--bd-white);
+                background: var(--bd-paper);
                 padding: 32px;
                 border-radius: 8px;
                 box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
@@ -147,11 +147,33 @@
                 margin-bottom: 0.7rem;
                 font-size: 16px;
             }
+
+         /* ---------- STRUCTURES ANIMATIONS ---------- */
+            .bd-js .bd-anim {
+                opacity: 0;
+                transform: translateY(16px);
+                transition: opacity .6s ease, transform .6s cubic-bezier(.2, .7, .2, 1);
+                will-change: opacity, transform;
+            }
+
+            .bd-js .bd-anim.is-in {
+                opacity: 1;
+                transform: none;
+            }
+
+            @media (prefers-reduced-motion: reduce) {
+                .bd-js .bd-anim {
+                    opacity: 1;
+                    transform: none;
+                    transition: none;
+                }
+            }
+            
         </style>
 
         <div class="bd-docs">
             <!--  En-tête  -->
-            <div class="bd-docs-head">
+            <div class="bd-docs-head bd-anim">
                 <div>
                     <span class="bd-eyebrow-dark">
                         {{ isset($document->is_new) && $document->is_new ? 'DOCUMENT INEXISTANT' : 'WIKI INTERNE' }}
@@ -163,14 +185,9 @@
                     </p>
                 </div>
 
-                <div>
-    
-</div>
+        
 
-
-
-
-                <div style="display: flex; gap: 10px;">
+                <div class="bd-anim" style="display: flex; gap: 10px;">
                     <!-- Lien vers les archives / dashboard global -->
                     <a class="bd-back-btn" href="javascript:history.back()">Retour</a>
 
@@ -194,7 +211,7 @@
             </div>
 
             <!--  Corps du Sommaire (Mode ÉDITION ou LECTURE) -->
-            <div class="py-6 max-w-4xl mx-auto">
+            <div class="py-6 max-w-7xl mx-auto px-10 ">
                 <div class="bd-wiki-content">
 
                     @if (request()->has('edit') && auth()->check())
@@ -225,7 +242,7 @@
                             <input type="hidden" name="slug" value="{{ $document->slug }}">
 
                             <!-- Titre -->
-                            <div style="margin-bottom: 1.5rem;">
+                            <div class="bd-anim" style="margin-bottom: 1.5rem;">
                                 <label for="title"
                                     style="display: block; font-size: 14px; font-weight: 600; margin-bottom: 0.5rem;">Titre
                                     du document :</label>
@@ -243,7 +260,7 @@
                             </div>
 
                             <!-- Actions -->
-                            <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                            <div class="bd-anim" style="display: flex; justify-content: flex-end; gap: 10px;">
                                 <!-- Si c'est un nouveau doc virtuel, annuler revient à l'historique précédent (votre sommaire) -->
                                 <a href="{{ isset($document->is_new) && $document->is_new ? 'javascript:history.back()' : route('documents.show', $document) }}"
                                     class="bd-back-btn">Annuler</a>
@@ -278,7 +295,9 @@
                             content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }',
                             relative_urls: false,
                             remove_script_host: true,
-                            convert_urls: false
+                            convert_urls: false,
+                            branding: false,
+                            help_accessibility: false
                         });
                     });
                 </script>
@@ -287,6 +306,24 @@
             </x-slot>
         @endif
 
+        <!-- Script d'activation des animations au scroll -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            document.body.classList.add('bd-js');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-in');
+                    }
+                });
+            }, {
+                threshold: 0.5
+            });
+
+            document.querySelectorAll('.bd-anim').forEach(el => observer.observe(el));
+        });
+    </script>
 
     </body>
 </x-app-layout>
