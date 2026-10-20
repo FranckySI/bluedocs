@@ -20,9 +20,9 @@
                 <!-- NOUVEAU : Zone d'importation de fichier Word local -->
                 <div class="mb-6 p-4 bg-gray-50 border border-gray-200 rounded-md">
                     <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Importer un fichier Word (.docx)
+                        Importer un fichier Word, Excel ou PDF (.docx, .xlsx, .xls, .pdf)
                     </label>
-                    <input type="file" id="word-import" accept=".docx"
+                    <input type="file" id="word-import" accept=".docx, .xlsx, .xls, .pdf"
                         class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" />
                 </div>
 

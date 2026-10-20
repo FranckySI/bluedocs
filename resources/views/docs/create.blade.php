@@ -27,7 +27,7 @@
                             class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                     </div>
 
-                    <!-- Zone de texte pour Word (TinyMCE) -->
+                    <!-- Zone de texte pour TinyMCE -->
                     <div class="mb-6">
                         <label for="content" class="block text-sm font-medium text-gray-700 mb-2">Contenu :</label>
                         <textarea id="mon-editeur" name="content"></textarea>
