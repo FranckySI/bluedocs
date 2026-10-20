@@ -12,8 +12,7 @@
 >
     <div class="flex h-20 items-center justify-between px-6">
         <a href="{{ route('accueil') }}" class="flex items-center gap-3">
-            <img src="{{ asset('images/logo.png') }}" alt="" class="h-9 w-auto">
-            <span class="text-lg font-semibold tracking-tight text-slate-900"></span>
+            <img src="{{ asset('images/logo_.png') }}" alt="BlueDocs" class="h-auto w-40">
         </a>
         <button
             type="button"

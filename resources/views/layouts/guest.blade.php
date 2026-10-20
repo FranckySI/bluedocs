@@ -41,8 +41,7 @@
                         </svg>
                     </button>
                     <a href="{{ route('accueil') }}" class="flex items-center gap-3">
-                        <img src="{{ asset('images/logo.png') }}" alt="" class="h-8 w-auto">
-                        <span class="font-semibold text-gray-900"></span>
+                        <span class="font-semibold text-gray-900">BlueDocs</span>
                     </a>
                 </header>
 

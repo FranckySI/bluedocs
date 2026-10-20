@@ -6,6 +6,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>{{ config('app.name', 'Laravel') }}</title>
+        <link rel="icon" type="image/png" href="{{ asset('favicon.ico') }}">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -43,8 +44,7 @@
                         </svg>
                     </button>
                     <a href="{{ route('accueil') }}" class="flex items-center gap-3">
-                        <img src="{{ asset('images/logo.png') }}" alt="" class="h-8 w-auto">
-                        <span class="font-semibold text-gray-900"></span>
+                        <img src="{{ asset('images/logo_.png') }}" alt="BlueDocs" class="h-auto w-32">
                     </a>
                 </header>
 
