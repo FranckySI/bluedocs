@@ -1,0 +1,18 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+
+class Section extends Model
+{
+    protected $fillable = [
+        'title',
+    ];
+
+    public function documents(): BelongsToMany
+    {
+        return $this->belongsToMany(Document::class, 'document_section', 'section_id', 'document_id');
+    }
+}

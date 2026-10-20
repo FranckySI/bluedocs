@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Document;
+use App\Models\Section;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class DocumentController extends Controller
 {
-
     public function index()
     {
         $documents = Document::latest()->get();
+
         return view('pages.document', compact('documents'));
     }
 
@@ -23,7 +25,7 @@ class DocumentController extends Controller
 
     public function store(Request $request)
     {
-        // Validation 
+        // Validation
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
@@ -47,8 +49,8 @@ class DocumentController extends Controller
         $document = Document::where('slug', $slug)->first();
 
         //  S'il n'existe pas dans MySQL, on prépare un document "virtuel"
-        if (!$document) {
-            $document = new Document();
+        if (! $document) {
+            $document = new Document;
             $document->title = ucfirst(str_replace('-', ' ', $slug));
             $document->slug = $slug;
             // Ce contenu sera visible uniquement en mode lecture
@@ -62,16 +64,24 @@ class DocumentController extends Controller
             $document->is_new = true;
         }
 
-        return view('docs.sommaire', compact('document'));
+        return view('docs.sommaire', [
+            'document' => $document,
+            'isSommaire' => false,
+        ]);
     }
 
-    public function showSommaire()
+    public function showSommaire(): View
     {
-        $document = Document::where('slug', 'sommaire')->firstOrFail();
-        return view('docs.sommaire', compact('document'));
+        $sections = Section::query()
+            ->with('documents')
+            ->orderBy('id')
+            ->get();
+
+        return view('docs.sommaire', [
+            'isSommaire' => true,
+            'sections' => $sections,
+        ]);
     }
-
-
 
     public function edit(Document $document)
     {
@@ -89,7 +99,7 @@ class DocumentController extends Controller
         // On prépare les données à sauvegarder
         $data = $validated;
         $data['updated_by'] = Auth::id();   // Enregistre l'ID (Utile pour la relation Eloquent)
-        $data['user_name']  = Auth::user()->name; // Écrase l'ancien nom par celui du modificateur
+        $data['user_name'] = Auth::user()->name; // Écrase l'ancien nom par celui du modificateur
 
         // Mise à jour du document dans la base de données
         $document->update($data);
@@ -98,10 +108,10 @@ class DocumentController extends Controller
         return redirect()->route('docs.sommaire')->with('success', 'Document mis à jour avec succès !');
     }
 
-
     public function destroy(Document $document)
     {
         $document->delete();
+
         return redirect()->route('pages.document')->with('success', 'Document supprimé avec succès !');
     }
 }

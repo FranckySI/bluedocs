@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SectionController;
 use Illuminate\Support\Facades\Route;
 
 // ROUTES DE NAVIGATION
@@ -19,6 +20,9 @@ Route::get('/sommaire', [DocumentController::class, 'showSommaire'])->name('docs
 
 //  CRUD DES DOCUMENTS (Protégées par Auth)
 Route::middleware('auth')->group(function () {
+    Route::post('/sommaire/sections', [SectionController::class, 'store'])->name('sections.store');
+    Route::delete('/sommaire/sections/{section}', [SectionController::class, 'destroy'])->name('sections.destroy');
+
     // Liste des archives / Tous les documents
     Route::get('/documents', [DocumentController::class, 'index'])->name('pages.document');
 
