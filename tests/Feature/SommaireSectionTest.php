@@ -4,13 +4,19 @@ use App\Models\Document;
 use App\Models\Section;
 use App\Models\User;
 
-it('lists sections on the sommaire page', function () {
+it('shows the single Sommaire document instead of legacy sections', function () {
+    Document::create([
+        'title' => 'Sommaire',
+        'slug' => 'sommaire',
+        'content' => '<h2>Liens importants</h2>',
+        'user_name' => 'Test User',
+    ]);
     Section::create(['title' => 'Nouvelle section']);
 
     $this->get(route('docs.sommaire'))
         ->assertOk()
-        ->assertSee('Nouvelle section')
-        ->assertSee('Cette section ne contient pas encore de documents.');
+        ->assertSee('Liens importants')
+        ->assertDontSee('Nouvelle section');
 });
 
 it('creates a section from the sommaire page', function () {
@@ -40,6 +46,7 @@ it('requires authentication to create a section', function () {
 it('deletes a section without deleting its documents', function () {
     $document = Document::create([
         'title' => 'Document conservé',
+        'slug' => 'document-conserve',
         'content' => '<p>Contenu du document.</p>',
         'user_name' => 'Test User',
     ]);

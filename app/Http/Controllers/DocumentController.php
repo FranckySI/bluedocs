@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Document;
-use App\Models\Section;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class DocumentController extends Controller
@@ -23,27 +24,32 @@ class DocumentController extends Controller
         return view('docs.create');
     }
 
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        // Validation
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
+            'slug' => 'nullable|string|max:255|unique:documents,slug',
         ]);
 
-        // Sauvegarde base de données
-        Document::create([
+        $document = Document::create([
             'title' => $validated['title'],
-            'slug' => $request->input('slug') ?? Str::slug($validated['title']),
+            'slug' => $validated['slug'] ?? Str::slug($validated['title']),
             'content' => $validated['content'],
             'user_name' => Auth::user()->name,
+        ]);
+
+        Log::info('Document created.', [
+            'document_id' => $document->id,
+            'slug' => $document->slug,
+            'actor_id' => Auth::id(),
         ]);
 
         return redirect()->route('docs.sommaire')->with('success', 'Document créé avec succès !');
     }
 
     // Affiche le détail d'un doc
-    public function show($slug)
+    public function show(string $slug): View
     {
         //  cherche le document par slug
         $document = Document::where('slug', $slug)->first();
@@ -72,14 +78,23 @@ class DocumentController extends Controller
 
     public function showSommaire(): View
     {
-        $sections = Section::query()
-            ->with('documents')
-            ->orderBy('id')
-            ->get();
+        $document = Document::query()
+            ->where('slug', 'sommaire')
+            ->first();
+
+        if (! $document) {
+            $document = new Document([
+                'title' => 'Sommaire',
+                'slug' => 'sommaire',
+                'content' => '<p>Le sommaire n’a pas encore été rédigé.</p>',
+                'user_name' => 'Système',
+            ]);
+            $document->is_new = true;
+        }
 
         return view('docs.sommaire', [
-            'isSommaire' => true,
-            'sections' => $sections,
+            'document' => $document,
+            'isSommaire' => false,
         ]);
     }
 
@@ -88,7 +103,7 @@ class DocumentController extends Controller
         return view('docs.edit', compact('document'));
     }
 
-    public function update(Request $request, Document $document)
+    public function update(Request $request, Document $document): RedirectResponse
     {
         // Validation des données du formulaire
         $validated = $request->validate([
@@ -104,13 +119,27 @@ class DocumentController extends Controller
         // Mise à jour du document dans la base de données
         $document->update($data);
 
-        // Redirection vers la page de liste des documents avec un message de succès
+        Log::info('Document updated.', [
+            'document_id' => $document->id,
+            'slug' => $document->slug,
+            'actor_id' => Auth::id(),
+        ]);
+
         return redirect()->route('docs.sommaire')->with('success', 'Document mis à jour avec succès !');
     }
 
-    public function destroy(Document $document)
+    public function destroy(Document $document): RedirectResponse
     {
+        $documentId = $document->id;
+        $documentSlug = $document->slug;
+
         $document->delete();
+
+        Log::info('Document deleted.', [
+            'document_id' => $documentId,
+            'slug' => $documentSlug,
+            'actor_id' => Auth::id(),
+        ]);
 
         return redirect()->route('pages.document')->with('success', 'Document supprimé avec succès !');
     }

@@ -10,245 +10,388 @@
             --bd-white: #ffffff;
             --bd-paper: #f4f7fb;
             --bd-ink: #0a1420;
-            --bd-muted: #93a6c2;
-            --bd-line: rgba(255, 255, 255, 0.12);
+            --bd-muted: #6b7a90;
+            --bd-line: #e6eaf0;
 
-            --bd-font-display: 'Space Grotesk', sans-serif;
-            --bd-font-body: 'Inter', sans-serif;
+            --bd-font-display: 'Plus Jakarta Sans', sans-serif;
+            --bd-font-body: 'Plus Jakarta Sans', sans-serif;
             --bd-font-mono: 'JetBrains Mono', monospace;
+            --bd-ease: cubic-bezier(.22, 1, .36, 1);
         }
 
         body {
-            background: var(--bd-paper);
+            background: #f7f7f7;
             font-family: var(--bd-font-body);
             color: var(--bd-ink);
         }
 
+        /* Fond et panneau alignés sur le sommaire */
         .bd-docs {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 40px 70px;
+            box-sizing: border-box;
+            width: 100%;
+            min-height: 100vh;
+            padding: 0;
+            background: #f7f7f7;
+        }
+
+        .bd-panel {
+            box-sizing: border-box;
+            width: 100%;
+            min-height: 100vh;
+            padding: clamp(28px, 6vh, 72px) clamp(24px, 3vw, 40px);
+            background: var(--bd-white);
+            animation: bd-docs-enter .75s var(--bd-ease) both;
         }
 
         /* ---------- En-tête de page ---------- */
         .bd-docs-head {
             display: flex;
-            align-items: flex-end;
+            align-items: flex-start;
             justify-content: space-between;
             flex-wrap: wrap;
             gap: 16px;
-            margin-bottom: 26px;
+            margin-bottom: 24px;
+            animation: bd-docs-enter .75s var(--bd-ease) .08s both;
         }
 
         .bd-eyebrow-dark {
-            display: inline-block;
-            font-family: var(--bd-font-mono);
-            font-size: 12px;
-            letter-spacing: 2px;
-            color: var(--bd-blue);
-            border: 1px solid var(--bd-blue);
-            border-radius: 20px;
-            padding: 5px 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            color: #52627a;
+            background: #f1f5f9;
+            border-radius: 6px;
+            padding: 4px 10px;
             margin-bottom: 12px;
         }
 
-        .bd-docs-title {
-            font-family: var(--bd-font-display);
-            font-weight: 700;
-            text-transform: uppercase;
-            font-size: clamp(24px, 3vw, 34px);
-            margin: 0;
+        .bd-eyebrow-dark::before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--bd-blue-light);
         }
 
-        .bd-docs-title .accent {
-            color: var(--bd-red);
+        .bd-docs-title {
+            margin: 0;
+            font-family: var(--bd-font-display);
+            font-weight: 600;
+            font-size: clamp(20px, 2.2vw, 26px);
+            line-height: 1.2;
+            letter-spacing: -0.02em;
         }
 
         .bd-docs-sub {
-            font-size: 13.5px;
-            color: #5b6b83;
+            max-width: 540px;
             margin: 6px 0 0;
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--bd-muted);
+        }
+
+        .bd-ico {
+            width: 16px;
+            height: 16px;
+            flex: 0 0 auto;
+            stroke-width: 1.8;
         }
 
         .bd-add-btn {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: var(--bd-blue-dark);
+            background: var(--bd-ink);
             color: var(--bd-white);
             text-decoration: none;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
-            padding: 12px 20px;
-            border-radius: 4px;
-            transition: background .2s ease;
+            line-height: 1.2;
+            padding: 9px 14px;
+            border: 1px solid var(--bd-ink);
+            border-radius: 10px;
+            transition: background-color .25s var(--bd-ease), border-color .25s var(--bd-ease),
+                transform .25s var(--bd-ease), box-shadow .25s var(--bd-ease);
             white-space: nowrap;
         }
 
         .bd-add-btn:hover,
         .bd-add-btn:focus-visible {
-            background: var(--bd-blue-light);
+            background: #1b2a3d;
+            border-color: #1b2a3d;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 14px -6px rgba(10, 20, 32, 0.45);
         }
 
-        /* ---------- Liste & Tableau des Documents ---------- */
+        .bd-add-btn:focus-visible,
+        .bd-doc-title-link:focus-visible,
+        .bd-btn-action:focus-visible {
+            outline: 2px solid var(--bd-blue-light);
+            outline-offset: 3px;
+        }
+
+        /* ---------- Liste façon tableau ---------- */
         .bd-table-container {
-            background: var(--bd-white);
-            border-radius: 8px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-            overflow: hidden;
-            margin-top: 20px;
+            animation: bd-docs-enter .75s var(--bd-ease) .14s both;
         }
 
         .bd-table {
             width: 100%;
+            table-layout: fixed;
             border-collapse: collapse;
             text-align: left;
         }
 
         .bd-table th {
-            background: var(--bd-red-dark);
-            color: var(--bd-white);
-            font-family: var(--bd-font-mono);
-            font-size: 13px;
-            letter-spacing: 1px;
-            padding: 16px 24px;
-            text-transform: uppercase;
+            padding: 10px 14px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--bd-muted);
+            background: #fafbfc;
+            border-top: 1px solid var(--bd-line);
+            border-bottom: 1px solid var(--bd-line);
         }
 
         .bd-table td {
-            padding: 18px 24px;
-            border-bottom: 1px solid #eef2f6;
-            font-size: 15px;
+            padding: 14px;
+            font-size: 13.5px;
+            border-bottom: 1px solid var(--bd-line);
         }
 
-        .bd-table tr:last-child td {
-            border-bottom: none;
+        .bd-table tbody tr {
+            animation: bd-docs-enter .65s var(--bd-ease) calc(.2s + var(--i, 0) * 55ms) both;
+            transition: background-color .25s ease;
+        }
+
+        .bd-table tbody tr:hover {
+            background: #fafbfc;
         }
 
         .bd-doc-title-link {
-            color: var(--bd-blue);
+            color: var(--bd-ink);
             font-weight: 600;
             text-decoration: none;
+            overflow-wrap: anywhere;
+            transition: color .2s ease;
         }
 
         .bd-doc-title-link:hover {
             color: var(--bd-blue-light);
-            text-decoration: underline;
         }
 
         .bd-doc-date {
             font-family: var(--bd-font-mono);
-            font-size: 13px;
+            font-size: 11.5px;
             color: var(--bd-muted);
         }
 
         .bd-actions {
             display: flex;
-            gap: 12px;
+            flex-wrap: wrap;
+            gap: 8px;
             justify-content: flex-end;
         }
 
+        .bd-actions form {
+            margin: 0;
+        }
+
         .bd-btn-action {
-            font-size: 13px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-family: inherit;
+            font-size: 12px;
             font-weight: 600;
             text-decoration: none;
-            padding: 6px 12px;
-            border-radius: 4px;
-            transition: all 0.2s ease;
+            padding: 7px 10px;
+            border-radius: 8px;
+            transition: color .2s ease, background-color .2s ease, border-color .2s ease,
+                transform .25s var(--bd-ease);
             background: none;
-            border: none;
+            border: 1px solid transparent;
             cursor: pointer;
         }
 
+        .bd-btn-action svg {
+            width: 14px;
+            height: 14px;
+            stroke-width: 1.8;
+        }
+
         .bd-btn-edit {
-            color: var(--bd-blue-light);
-            border: 1px solid var(--bd-blue-light);
+            color: var(--bd-blue);
+            background: #eff6ff;
+            border-color: #dbeafe;
         }
 
         .bd-btn-edit:hover {
-            background: var(--bd-blue-light);
-            color: var(--bd-white);
+            background: #dbeafe;
+            border-color: #bfdbfe;
+            color: var(--bd-blue-dark);
+            transform: translateY(-1px);
         }
 
         .bd-btn-delete {
-            color: var(--bd-red);
-            border: 1px solid var(--bd-red);
+            color: var(--bd-red-dark);
+            background: #fff1f3;
+            border-color: #fbd0d8;
         }
 
         .bd-btn-delete:hover {
-            background: var(--bd-red);
-            color: var(--bd-white);
+            background: #ffe4e8;
+            border-color: #f9b7c4;
+            transform: translateY(-1px);
         }
 
         .bd-empty-state {
-            padding: 60px;
+            padding: 40px 24px !important;
             text-align: center;
             color: var(--bd-muted);
-            font-size: 16px;
+            font-size: 14px;
+        }
+
+        @keyframes bd-docs-enter {
+            from {
+                opacity: 0;
+                transform: translateY(14px);
+            }
+
+            to {
+                opacity: 1;
+                transform: none;
+            }
+        }
+
+        @media (max-width: 720px) {
+            .bd-docs {
+                width: 100%;
+                min-height: 100vh;
+                padding: 0;
+            }
+
+            .bd-panel {
+                padding: 28px 16px 36px;
+            }
+
+            .bd-docs-head {
+                margin-bottom: 20px;
+            }
+
+            .bd-add-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .bd-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .bd-btn-action {
+                width: 100%;
+                overflow-wrap: anywhere;
+            }
+
+            .bd-table th,
+            .bd-table td {
+                overflow-wrap: anywhere;
+                padding-right: 10px;
+                padding-left: 10px;
+            }
+
+            .bd-doc-date {
+                font-size: 10px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .bd-panel,
+            .bd-docs-head,
+            .bd-table-container,
+            .bd-table tbody tr {
+                animation: none;
+            }
+
+            .bd-add-btn,
+            .bd-doc-title-link,
+            .bd-btn-action,
+            .bd-table tbody tr {
+                transition: none;
+            }
         }
     </style>
 
     <div class="bd-docs">
-        <!-- ===== En-tête ===== -->
-        <div class="bd-docs-head">
-            <div>
-                <span class="bd-eyebrow-dark">GESTION DOCUMENTAIRE</span>
-                <h1 class="bd-docs-title">Tous les <span class="accent">documents</span></h1>
-                <p class="bd-docs-sub">Consultez, modifiez ou supprimez les documents classés par catégorie.</p>
+        <div class="bd-panel">
+            <!-- ===== En-tête ===== -->
+            <div class="bd-docs-head">
+                <div>
+                    <span class="bd-eyebrow-dark">GESTION DOCUMENTAIRE</span>
+                    <h1 class="bd-docs-title">Tous les documents</h1>
+                    <p class="bd-docs-sub">Consultez, modifiez ou supprimez les documents classés par catégorie.</p>
+                </div>
+                @auth
+                    <a class="bd-add-btn" href="{{ route('documents.create') }}">
+                        <x-lucide-plus class="bd-ico" aria-hidden="true" />
+                        Ajouter un document
+                    </a>
+                @endauth
             </div>
-            @auth
-                <a class="bd-add-btn" href="{{ route('documents.create') }}">+ Ajouter un document</a>
-            @endauth
-        </div>
 
-        <!-- Liste des documents disponibles -->
-        <div class="bd-table-container">
-            <table class="bd-table">
-                <thead>
-                    <tr>
-                        <th style="width: 50%;">Nom du document</th>
-                        <th style="width: 25%;">Date d'ajout</th>
-                        <th style="width: 25%; text-align: right;">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse ($documents as $document)
+            <!-- Liste des documents disponibles -->
+            <div class="bd-table-container">
+                <table class="bd-table">
+                    <thead>
                         <tr>
-                            <td>
-                                <a href="{{ route('documents.show', $document->slug) }}" class="bd-doc-title-link">
-                                    {{ $document->title }}
-                                </a>
-                            </td>
-                            <td>
-                                <span class="bd-doc-date">{{ $document->created_at->format('d/m/Y H:i') }}</span>
-                            </td>
-                            <td>
-                                
-                                <div class="bd-actions">
-                                    <a href="{{ route('documents.edit', $document->id) }}" class="bd-btn-action bd-btn-edit">
-                                        Modifier
+                            <th style="width: 50%;">Nom du document</th>
+                            <th style="width: 25%;">Date d'ajout</th>
+                            <th style="width: 25%; text-align: right;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($documents as $document)
+                            <tr style="--i: {{ min($loop->index, 14) }};">
+                                <td>
+                                    <a href="{{ route('documents.show', $document->slug) }}" class="bd-doc-title-link">
+                                        {{ $document->title }}
                                     </a>
+                                </td>
+                                <td>
+                                    <span class="bd-doc-date">{{ $document->created_at->format('d/m/Y H:i') }}</span>
+                                </td>
+                                <td>
+                                    <div class="bd-actions">
+                                        <a href="{{ route('documents.edit', $document->id) }}" class="bd-btn-action bd-btn-edit">
+                                            <x-lucide-pencil aria-hidden="true" />
+                                            Modifier
+                                        </a>
 
-                                    <form action="{{ route('documents.destroy', $document->id) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce document ?');" style="display:inline;">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="bd-btn-action bd-btn-delete">
-                                            Supprimer
-                                        </button>
-                                    </form>
-                                </div>
-                                
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="3" class="bd-empty-state">
-                                Aucun document n'a été trouvé dans le système.
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                                        <form action="{{ route('documents.destroy', $document->id) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce document ?');" style="display:inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="bd-btn-action bd-btn-delete">
+                                                <x-lucide-trash-2 aria-hidden="true" />
+                                                Supprimer
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="3" class="bd-empty-state">
+                                    Aucun document n'a été trouvé dans le système.
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </x-app-layout>

@@ -15,8 +15,8 @@
             --bd-muted: #93a6c2;
             --bd-line: rgba(255, 255, 255, 0.12);
 
-            --bd-font-display: 'Space Grotesk', sans-serif;
-            --bd-font-body: 'Inter', sans-serif;
+            --bd-font-display: 'Plus Jakarta Sans', sans-serif;
+            --bd-font-body: 'Plus Jakarta Sans', sans-serif;
             --bd-font-mono: 'JetBrains Mono', monospace;
         }
 

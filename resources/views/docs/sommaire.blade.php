@@ -15,8 +15,8 @@
             --bd-line: #e6eaf0;
             --bd-live: #16a34a;
 
-            --bd-font-display: 'Space Grotesk', sans-serif;
-            --bd-font-body: 'Inter', sans-serif;
+            --bd-font-display: 'Plus Jakarta Sans', sans-serif;
+            --bd-font-body: 'Plus Jakarta Sans', sans-serif;
             --bd-font-mono: 'JetBrains Mono', monospace;
 
             --bd-ease: cubic-bezier(.22, 1, .36, 1);
@@ -537,8 +537,28 @@
         }
 
         .tox-tinymce {
-            border-color: var(--bd-line) !important;
-            border-radius: 12px !important;
+            border: 0 !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+        }
+
+        .tox .tox-editor-header {
+            border-bottom: 1px solid var(--bd-line) !important;
+            box-shadow: none !important;
+        }
+
+        .tox .tox-toolbar,
+        .tox .tox-toolbar__overflow,
+        .tox .tox-toolbar__primary {
+            background: transparent !important;
+        }
+
+        .tox .tox-edit-area::before {
+            border: 1px solid var(--bd-line) !important;
+        }
+
+        .tox .tox-statusbar {
+            border-top: 0 !important;
         }
 
         /* ---------- Animation d'arrivée (au chargement) ---------- */
@@ -640,9 +660,9 @@
                     <span class="bd-tag {{ $isNewDoc ? 'bd-tag--warn' : '' }}">
                         {{ $isNewDoc ? 'DOCUMENT INEXISTANT' : 'WIKI INTERNE' }}
                     </span>
-                    <h1 class="bd-docs-title">{{ $isSommaire ? 'Sommaire' : $document->title }}</h1>
+                    <h1 class="bd-docs-title">{{ $document->title }}</h1>
                     <p class="bd-docs-sub">
-                        {{ $isSommaire ? 'Parcourez les sections et les documents disponibles.' : 'Cliquez sur une section pour ouvrir directement la documentation associée.' }}
+                        {{ $document->slug === 'sommaire' ? 'Consultez les informations et les liens utiles de l’espace documentaire.' : 'Consultez la documentation associée à cette page.' }}
                     </p>
                     @if (!$isSommaire)
                         <p class="bd-docs-meta">
@@ -707,21 +727,21 @@
             <!--  Corps du Sommaire (Mode ÉDITION ou LECTURE) -->
             <div class="bd-wiki-content {{ $isSommaire ? '' : 'bd-enter-body' }}">
 
+                @if (session('success'))
+                    <div class="bd-sommaire-alert bd-sommaire-alert-success" role="status">
+                        {{ session('success') }}
+                    </div>
+                @endif
+
+                @if ($errors->any())
+                    <div class="bd-sommaire-alert bd-sommaire-alert-error" role="alert">
+                        @foreach ($errors->all() as $error)
+                            <p>{{ $error }}</p>
+                        @endforeach
+                    </div>
+                @endif
+
                 @if ($isSommaire)
-                    @if (session('success'))
-                        <div class="bd-sommaire-alert bd-sommaire-alert-success" role="status">
-                            {{ session('success') }}
-                        </div>
-                    @endif
-
-                    @if ($errors->any())
-                        <div class="bd-sommaire-alert bd-sommaire-alert-error" role="alert">
-                            @foreach ($errors->all() as $error)
-                                <p>{{ $error }}</p>
-                            @endforeach
-                        </div>
-                    @endif
-
                     @if ($sections->isEmpty())
                         <p class="bd-sommaire-empty">Aucune section disponible pour le moment.</p>
                     @else
@@ -816,25 +836,27 @@
                         @endif
 
                         <!-- Slug caché pour la création à la volée -->
-                        <input type="hidden" name="slug" value="{{ $document->slug }}">
+                        @if (isset($document->is_new) && $document->is_new)
+                            <input type="hidden" name="slug" value="{{ $document->slug }}">
+                        @endif
 
                         <!-- Titre -->
                         <div class="bd-field">
                             <label for="title" class="bd-label">Titre du document :</label>
-                            <input type="text" id="title" name="title" value="{{ $document->title }}"
+                            <input type="text" id="title" name="title" value="{{ old('title', $document->title) }}"
                                 required class="bd-input">
                         </div>
 
                         <!-- Éditeur TinyMCE -->
                         <div class="bd-field">
                             <label for="mon-editeur" class="bd-label">Contenu :</label>
-                            <textarea id="mon-editeur" name="content">{!! isset($document->is_new) && $document->is_new ? '' : $document->content !!}</textarea>
+                            <textarea id="mon-editeur" name="content">{{ old('content', isset($document->is_new) && $document->is_new ? '' : $document->content) }}</textarea>
                         </div>
 
                         <!-- Actions -->
                         <div class="bd-form-actions">
                             <!-- Si c'est un nouveau doc virtuel, annuler revient à l'historique précédent (votre sommaire) -->
-                            <a href="{{ isset($document->is_new) && $document->is_new ? 'javascript:history.back()' : route('documents.show', $document) }}"
+                            <a href="{{ isset($document->is_new) && $document->is_new ? 'javascript:history.back()' : route('documents.show', $document->slug) }}"
                                 class="bd-back-btn">Annuler</a>
                             <button type="submit" class="bd-add-btn bd-add-btn--success">
                                 <x-lucide-check class="bd-ico" aria-hidden="true" />
@@ -863,15 +885,19 @@
                         selector: '#mon-editeur',
                         license_key: 'gpl',
                         language: 'fr_FR',
-                        height: 500,
-                        plugins: 'advlist  autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table help wordcount ',
-                        toolbar: 'undo redo | blocks | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table link image | removeformat | help',
-                        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }',
+                        height: 420,
+                        menubar: false,
+                        statusbar: false,
+                        resize: false,
+                        plugins: 'lists link autolink',
+                        toolbar: 'undo redo | blocks | bold italic | bullist numlist | link unlink',
+                        block_formats: 'Paragraphe=p; Titre 1=h1; Titre 2=h2; Titre 3=h3',
+                        content_style: 'body { font-family:"Plus Jakarta Sans",sans-serif; font-size:16px }',
                         relative_urls: false,
                         remove_script_host: true,
                         convert_urls: false,
                         branding: false,
-                        help_accessibility: false
+                        promotion: false
                     });
                 });
             </script>
