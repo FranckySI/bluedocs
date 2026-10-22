@@ -24,6 +24,10 @@
         </button>
     </div>
 
+    <div class="px-4 pb-4 pt-1">
+        <x-document-search />
+    </div>
+
     <nav class="flex-1 space-y-1 overflow-y-auto px-4 py-2">
         <a
             href="{{ route('docs.sommaire') }}"

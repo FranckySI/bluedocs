@@ -140,13 +140,13 @@
         /* Principal : pilule sombre (comme l'onglet actif du modèle) */
         .bd-add-btn {
             color: var(--bd-white);
-            background: var(--bd-ink);
-            border: 1px solid var(--bd-ink);
+            background: #1b2a3d;
+            border: 1px solid #1b2a3d;
         }
 
         .bd-add-btn:hover {
-            background: #1b2a3d;
-            border-color: #1b2a3d;
+            background:var(--bd-ink);
+            border-color:var(--bd-ink);
             transform: translateY(-1px);
             box-shadow: 0 6px 14px -6px rgba(10, 20, 32, 0.45);
         }
@@ -866,7 +866,7 @@
                     </form>
                 @else
                     <!-- MODE LECTURE (Par défaut) -->
-                    <div class="target-links">
+                    <div class="target-links" id="document-content">
                         {!! $document->content !!}
                     </div>
                 @endif

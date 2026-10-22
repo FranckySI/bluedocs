@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\DocumentSearchController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SectionController;
 use Illuminate\Support\Facades\Route;
@@ -17,6 +18,9 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 
 // Route du Sommaire
 Route::get('/sommaire', [DocumentController::class, 'showSommaire'])->name('docs.sommaire');
+
+// Recherche dans les documents
+Route::get('/recherche', DocumentSearchController::class)->name('documents.search');
 
 //  CRUD DES DOCUMENTS (Protégées par Auth)
 Route::middleware('auth')->group(function () {

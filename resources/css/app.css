@@ -121,3 +121,11 @@ html {
 [x-cloak] {
     display: none !important;
 }
+
+mark.document-search-highlight {
+    padding: 0 0.15rem;
+    border-radius: 0.2rem;
+    color: #00111f;
+    background: #fde68a;
+    box-decoration-break: clone;
+}
