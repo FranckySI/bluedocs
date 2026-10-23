@@ -1,0 +1,62 @@
+@startuml
+title BlueDocs — cas d'utilisation
+left to right direction
+skinparam shadowing false
+
+actor Visiteur
+actor "Utilisateur authentifié\n(éditeur)" as Editeur
+actor Administrateur as Admin
+Editeur <|-- Admin
+
+rectangle "BlueDocs" {
+  usecase "Consulter l'accueil" as UC_Accueil
+  usecase "Consulter le sommaire" as UC_Sommaire
+  usecase "Consulter un document\npar son slug" as UC_Lire
+  usecase "Rechercher des documents" as UC_Recherche
+  usecase "Consulter le tableau\nde bord" as UC_Dashboard
+  usecase "Se connecter" as UC_Login
+  usecase "Réinitialiser un mot\nde passe" as UC_Reset
+  usecase "Gérer son profil" as UC_Profil
+  usecase "Gérer son mot de passe" as UC_Password
+  usecase "Lister les documents" as UC_Lister
+  usecase "Créer un document" as UC_CreerDoc
+  usecase "Modifier un document" as UC_ModifierDoc
+  usecase "Supprimer un document" as UC_SupprimerDoc
+  usecase "Créer une section" as UC_CreerSection
+  usecase "Supprimer une section" as UC_SupprimerSection
+  usecase "Créer un compte utilisateur" as UC_CreerCompte
+  usecase "Se déconnecter" as UC_Logout
+}
+
+Visiteur --> UC_Accueil
+Visiteur --> UC_Sommaire
+Visiteur --> UC_Lire
+Visiteur --> UC_Recherche
+
+
+Editeur --> UC_Dashboard
+Editeur --> UC_Profil
+Editeur --> UC_Password
+Editeur --> UC_Lister
+Editeur --> UC_CreerDoc
+Editeur --> UC_ModifierDoc
+Editeur --> UC_SupprimerDoc
+Editeur --> UC_CreerSection
+Editeur --> UC_SupprimerSection
+Editeur --> UC_Login
+Editeur --> UC_Logout
+Editeur --> UC_Reset
+Admin --> UC_CreerCompte
+
+note right of UC_CreerCompte
+  Route protégée par la capacité
+  create-users (role = admin).
+end note
+
+note bottom of UC_CreerDoc
+  Les opérations documentaires et
+  sections requièrent une session
+  authentifiée, sans vérification
+  du rôle admin dans les routes.
+end note
+@enduml

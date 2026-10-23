@@ -1,0 +1,41 @@
+@startuml
+title BlueDocs — activité du cycle documentaire
+skinparam shadowing false
+
+start
+:Choisir une action documentaire;
+if (Consulter ?) then (oui)
+  :Demander un document par slug;
+  :Chercher le document;
+  if (Document trouvé ?) then (oui)
+    :Afficher le contenu stocké;
+  else (non)
+    :Construire un document virtuel en lecture;
+    :Ne rien insérer en base;
+  endif
+else (non)
+  if (Créer ou modifier ?) then (oui)
+    :Vérifier la session authentifiée;
+    :Valider titre et contenu;
+    if (Entrées valides ?) then (oui)
+      if (Création ?) then (oui)
+        :Déterminer le slug;
+        :Insérer le document et user_name;
+      else (modification)
+        :Enregistrer titre et contenu;
+        :Enregistrer updated_by et user_name;
+      endif
+      :Journaliser les métadonnées;
+      :Rediriger vers le sommaire;
+    else (non)
+      :Afficher les erreurs;
+    endif
+  else (suppression)
+    :Vérifier la session authentifiée;
+    :Supprimer le document;
+    :Journaliser les métadonnées;
+    :Rediriger vers la liste des documents;
+  endif
+endif
+stop
+@enduml

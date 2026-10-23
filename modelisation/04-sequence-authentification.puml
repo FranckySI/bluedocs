@@ -1,0 +1,37 @@
+@startuml
+title BlueDocs — séquence de connexion
+autonumber
+skinparam shadowing false
+
+actor Visiteur
+boundary "Navigateur" as Browser
+control "Routes auth" as Routes
+control "AuthenticatedSessionController" as SessionController
+control "LoginRequest" as LoginRequest
+control "Laravel RateLimiter" as Limiter
+database "users / session" as DB
+
+Visiteur -> Browser : Ouvre /login
+Browser -> Routes : GET /login
+Routes -> SessionController : create()
+SessionController --> Browser : Vue auth.login
+
+Visiteur -> Browser : Envoie email, mot de passe,\noption remember
+Browser -> Routes : POST /login
+Routes -> LoginRequest : Validation + authenticate()
+LoginRequest -> Limiter : Vérifier la limite (5 tentatives)\npar email/IP
+alt Limite dépassée
+  LoginRequest --> Browser : Erreur de limitation
+else Tentatives permises
+  LoginRequest -> DB : Auth::attempt(email, password)
+  alt Identifiants invalides
+    LoginRequest -> Limiter : Incrémenter le compteur
+    LoginRequest --> Browser : Erreur d'authentification
+  else Identifiants valides
+    LoginRequest -> Limiter : Effacer le compteur
+    LoginRequest --> SessionController : Authentification réussie
+    SessionController -> DB : Régénérer l'identifiant de session
+    SessionController --> Browser : Redirection intended\nou /dashboard
+  end
+end
+@enduml

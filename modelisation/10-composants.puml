@@ -1,0 +1,31 @@
+@startuml
+title BlueDocs — architecture logique des composants
+skinparam componentStyle rectangle
+skinparam shadowing false
+
+actor Utilisateur
+component "Navigateur web" as Browser
+component "Routes HTTP\nweb.php / auth.php" as Routes
+component "Middleware Laravel\nauth / guest / can" as Middleware
+component "Contrôleurs\nDocument, Search, Section,\nDashboard, Profile, Auth" as Controllers
+component "Modèles Eloquent\nUser, Document, Section" as Models
+component "Vues Blade\npages, docs, auth, profile" as Views
+database "MySQL\nmétier + tables Laravel" as DB
+component "Journal Laravel" as Logger
+
+Utilisateur --> Browser
+Browser --> Routes : HTTP
+Routes --> Middleware : filtrer la requête
+Middleware --> Controllers : requête autorisée
+Controllers --> Models : lecture / écriture
+Models --> DB : SQL
+Controllers --> Views : données pour rendu
+Views --> Browser : HTML
+Controllers --> Logger : événements applicatifs
+
+note bottom of DB
+  Le schéma observé n'inclut pas
+  document_section, contrairement
+  aux modèles et migrations.
+end note
+@enduml

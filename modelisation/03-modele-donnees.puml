@@ -1,0 +1,140 @@
+@startuml
+title BlueDocs — schéma physique MySQL observé
+hide circle
+skinparam linetype ortho
+skinparam shadowing false
+
+entity "users" as users {
+  * id : bigint unsigned <<PK>>
+  --
+  name : varchar(255)
+  email : varchar(255) <<UNIQUE>>
+  role : varchar(255)
+  email_verified_at : timestamp NULL
+  password : varchar(255)
+  remember_token : varchar(100) NULL
+  last_login_at : timestamp NULL
+  created_at : timestamp NULL
+  updated_at : timestamp NULL
+}
+
+entity "documents" as documents {
+  * id : bigint unsigned <<PK>>
+  --
+  slug : varchar(255)
+  title : varchar(255)
+  content : longtext
+  user_name : varchar(255)
+  created_at : timestamp NULL
+  updated_at : timestamp NULL
+  updated_by : bigint unsigned NULL <<FK>>
+}
+
+entity "sections" as sections {
+  * id : bigint unsigned <<PK>>
+  --
+  title : varchar(255)
+  created_at : timestamp NULL
+  updated_at : timestamp NULL
+}
+
+entity "sessions" as sessions {
+  * id : varchar(255) <<PK>>
+  --
+  user_id : bigint unsigned NULL <<INDEX>>
+  ip_address : varchar(45) NULL
+  user_agent : text NULL
+  payload : longtext
+  last_activity : int <<INDEX>>
+}
+
+entity "password_reset_tokens" as reset_tokens {
+  * email : varchar(255) <<PK>>
+  --
+  token : varchar(255)
+  created_at : timestamp NULL
+}
+
+entity "cache" as cache {
+  * key : varchar(255) <<PK>>
+  --
+  value : mediumtext
+  expiration : bigint <<INDEX>>
+}
+
+entity "cache_locks" as cache_locks {
+  * key : varchar(255) <<PK>>
+  --
+  owner : varchar(255)
+  expiration : bigint <<INDEX>>
+}
+
+entity "jobs" as jobs {
+  * id : bigint unsigned <<PK>>
+  --
+  queue : varchar(255) <<INDEX>>
+  payload : longtext
+  attempts : smallint unsigned
+  reserved_at : int unsigned
+  available_at : int unsigned
+  created_at : int unsigned
+}
+
+entity "job_batches" as job_batches {
+  * id : varchar(255) <<PK>>
+  --
+  name : varchar(255)
+  total_jobs : int
+  pending_jobs : int
+  failed_jobs : int
+  failed_job_ids : longtext
+  options : mediumtext
+  cancelled_at : int NULL
+  created_at : int NULL
+  finished_at : int NULL
+}
+
+entity "failed_jobs" as failed_jobs {
+  * id : bigint unsigned <<PK>>
+  --
+  uuid : varchar(255) <<UNIQUE>>
+  connection : varchar(255)
+  queue : varchar(255)
+  payload : longtext
+  exception : longtext
+  failed_at : timestamp
+}
+
+note right of failed_jobs
+  Index composite non unique :
+  (connection, queue, failed_at).
+end note
+
+entity "migrations" as migrations {
+  * id : int unsigned <<PK>>
+  --
+  migration : varchar(255)
+  batch : int
+}
+
+users ||--o{ documents : "updated_by (SET NULL)"
+
+note right of sections
+  La base introspectée contient sections
+  mais pas document_section.
+  La migration crée pourtant cette table
+  de liaison attendue entre documents
+  et sections.
+end note
+
+note right of documents
+  L'index unique attendu pour slug
+  par la migration n'a pas été trouvé
+  dans le schéma MySQL observé.
+end note
+
+note bottom of sessions
+  user_id est indexé, mais sans clé
+  étrangère déclarée par la migration.
+end note
+@enduml
