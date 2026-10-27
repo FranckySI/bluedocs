@@ -32,9 +32,22 @@ class DocumentController extends Controller
             'slug' => 'nullable|string|max:255|unique:documents,slug',
         ]);
 
+        $slug = $validated['slug'] ?? Str::slug($validated['title']);
+
+        if (! isset($validated['slug'])) {
+            $baseSlug = $slug !== '' ? $slug : 'document';
+            $slug = $baseSlug;
+            $suffix = 2;
+
+            while (Document::query()->where('slug', $slug)->exists()) {
+                $slug = $baseSlug.'-'.$suffix;
+                $suffix++;
+            }
+        }
+
         $document = Document::create([
             'title' => $validated['title'],
-            'slug' => $validated['slug'] ?? Str::slug($validated['title']),
+            'slug' => $slug,
             'content' => $validated['content'],
             'user_name' => Auth::user()->name,
         ]);
@@ -48,18 +61,14 @@ class DocumentController extends Controller
         return redirect()->route('docs.sommaire')->with('success', 'Document créé avec succès !');
     }
 
-    // Affiche le détail d'un doc
     public function show(string $slug): View
     {
-        //  cherche le document par slug
         $document = Document::where('slug', $slug)->first();
 
-        //  S'il n'existe pas dans MySQL, on prépare un document "virtuel"
         if (! $document) {
             $document = new Document;
             $document->title = ucfirst(str_replace('-', ' ', $slug));
             $document->slug = $slug;
-            // Ce contenu sera visible uniquement en mode lecture
             $document->content = '
             <div class="p-6 bg-amber-50 border border-amber-200 rounded-md text-amber-800 mb-4">
                 <strong>Ce document n\'existe pas encore.</strong><br>
@@ -72,7 +81,6 @@ class DocumentController extends Controller
 
         return view('docs.sommaire', [
             'document' => $document,
-            'isSommaire' => false,
         ]);
     }
 
@@ -94,7 +102,6 @@ class DocumentController extends Controller
 
         return view('docs.sommaire', [
             'document' => $document,
-            'isSommaire' => false,
         ]);
     }
 

@@ -1,0 +1,19 @@
+@startuml
+title BlueDocs - Séquence d'authentification
+actor "Éditeur ou administrateur" as User
+participant "POST /login" as Route
+participant AuthenticatedSessionController as Controller
+participant LoginRequest as Request
+participant "Authentification Laravel" as Auth
+participant UpdateLastLoginAt as Listener
+
+User -> Route : Identifiants
+Route -> Controller : store(LoginRequest)
+Controller -> Request : authenticate()
+Request -> Auth : Vérifier email et mot de passe
+Auth --> Request : Authentification réussie
+Auth -> Listener : Événement Login
+Listener -> Listener : Mettre à jour users.last_login_at
+Controller -> Controller : Régénérer la session
+Controller --> User : Redirection vers dashboard
+@enduml

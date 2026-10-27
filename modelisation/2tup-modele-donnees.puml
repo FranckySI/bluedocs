@@ -1,0 +1,33 @@
+@startuml
+title BlueDocs - Modèle physique des données
+hide methods
+skinparam classAttributeIconSize 0
+
+entity "users" as users {
+  * id : BIGINT UNSIGNED <<PK>>
+  --
+  * name : VARCHAR(255)
+  * email : VARCHAR(255) <<UQ>>
+  * role : VARCHAR(255) = 'editeur'
+  email_verified_at : TIMESTAMP NULL
+  * password : VARCHAR(255)
+  remember_token : VARCHAR(100) NULL
+  last_login_at : TIMESTAMP NULL
+  created_at : TIMESTAMP NULL
+  updated_at : TIMESTAMP NULL
+}
+
+entity "documents" as documents {
+  * id : BIGINT UNSIGNED <<PK>>
+  --
+  * slug : VARCHAR(255) <<UQ>>
+  * title : VARCHAR(255)
+  * content : LONGTEXT
+  * user_name : VARCHAR(255)
+  updated_by : BIGINT UNSIGNED NULL <<FK>>
+  created_at : TIMESTAMP NULL
+  updated_at : TIMESTAMP NULL
+}
+
+users |o--o{ documents : "updated_by\nON DELETE SET NULL"
+@enduml

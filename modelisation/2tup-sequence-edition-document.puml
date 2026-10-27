@@ -1,0 +1,26 @@
+@startuml
+title BlueDocs - Modification d'un document par son slug
+actor "Éditeur ou administrateur" as Editor
+boundary "PUT /documents/{document}" as Route
+control "Middleware auth" as Auth
+control DocumentController as Controller
+entity "Eloquent Document" as Document
+database MySQL
+
+Editor -> Route : Envoyer titre et contenu\navec le slug dans l'URL
+Route -> Auth : Vérifier la session
+Auth --> Route : Utilisateur authentifié
+Route -> Document : Résoudre le modèle par slug
+Document -> MySQL : SELECT par slug unique
+MySQL --> Document : Document correspondant
+Route -> Controller : update(Request, Document)
+Controller -> Controller : Valider titre et contenu
+Controller -> Document : Modifier titre, contenu\net dernier éditeur
+note right of Document
+  Le slug reste inchangé
+  pendant la modification.
+end note
+Document -> MySQL : UPDATE documents
+MySQL --> Document : Enregistrement effectué
+Controller --> Editor : Redirection vers le sommaire
+@enduml

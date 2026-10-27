@@ -213,45 +213,6 @@
             border: 1px solid #fecaca;
         }
 
-        /* ---------- Ajouter une section (menu déroulant) ---------- */
-        .bd-section-create {
-            position: relative;
-        }
-
-        .bd-section-create summary {
-            list-style: none;
-        }
-
-        .bd-section-create summary::-webkit-details-marker {
-            display: none;
-        }
-
-        .bd-section-form {
-            position: absolute;
-            z-index: 5;
-            top: calc(100% + 8px);
-            right: 0;
-            width: min(340px, calc(100vw - 40px));
-            padding: 18px;
-            background: var(--bd-white);
-            border: 1px solid var(--bd-line);
-            border-radius: 14px;
-            box-shadow: 0 18px 40px -12px rgba(0, 17, 31, 0.22);
-            transform-origin: top right;
-        }
-
-        .bd-section-create[open] .bd-section-form {
-            animation: bd-pop .3s var(--bd-ease) both;
-        }
-
-        .bd-section-form label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .bd-section-input,
         .bd-input {
             width: 100%;
             padding: 10px 12px;
@@ -264,169 +225,10 @@
             transition: border-color .2s ease, box-shadow .2s ease;
         }
 
-        .bd-section-input:focus,
         .bd-input:focus {
             outline: none;
             border-color: var(--bd-blue-light);
             box-shadow: 0 0 0 3px rgba(14, 95, 168, 0.14);
-        }
-
-        .bd-section-form-footer {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-top: 14px;
-        }
-
-        /* ---------- Sommaire : liste façon tableau ---------- */
-        .bd-rows {
-            --cols: minmax(200px, 1fr) minmax(0, 2.2fr);
-        }
-
-        .bd-rows--actions {
-            --cols: minmax(200px, 1fr) minmax(0, 2.2fr) minmax(84px, auto);
-        }
-
-        .bd-rows-head,
-        .bd-row {
-            display: grid;
-            grid-template-columns: var(--cols);
-            align-items: center;
-            gap: 16px;
-            padding: 0 14px;
-        }
-
-        .bd-rows-head {
-            padding-top: 10px;
-            padding-bottom: 10px;
-            font-size: 12px;
-            font-weight: 500;
-            color: var(--bd-muted);
-            background: #fafbfc;
-            border-top: 1px solid var(--bd-line);
-            border-bottom: 1px solid var(--bd-line);
-        }
-
-        .bd-rows-head span:last-child:not(:first-child):not(:nth-child(2)),
-        .bd-rows--actions .bd-rows-head span:nth-child(3) {
-            text-align: center;
-        }
-
-        .bd-row {
-            padding-top: 14px;
-            padding-bottom: 14px;
-            border-bottom: 1px solid var(--bd-line);
-            transition: background-color .25s ease;
-        }
-
-        .bd-row:hover {
-            background: #fafbfc;
-        }
-
-        .bd-row-title {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            min-width: 0;
-        }
-
-        .bd-section-title {
-            margin: 0;
-            font-family: var(--bd-font-display);
-            font-size: 15px;
-            font-weight: 50;
-            letter-spacing: -0.01em;
-            overflow-wrap: anywhere;
-        }
-
-        .bd-section-title a {
-            color: var(--bd-ink);
-            text-decoration: none;
-            transition: color .2s ease;
-        }
-
-        .bd-section-title a:hover {
-            color: var(--bd-blue-light);
-        }
-
-        .bd-section-documents {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin: 0;
-            padding: 0;
-            list-style: none;
-        }
-
-        .bd-section-documents a {
-            display: inline-flex;
-            align-items: center;
-            padding: 5px 10px;
-            font-size: 12.5px;
-            font-weight: 500;
-            color: var(--bd-blue);
-            text-decoration: none;
-            background: var(--bd-white);
-            border: 1px solid var(--bd-line);
-            border-radius: 8px;
-            transition: color .2s ease, border-color .2s ease, background-color .2s ease, transform .25s var(--bd-ease);
-        }
-
-        .bd-section-documents a:hover {
-            color: var(--bd-blue-light);
-            background: var(--bd-paper);
-            border-color: #cddbea;
-            transform: translateY(-1px);
-        }
-
-        .bd-section-empty {
-            margin: 0;
-            font-size: 13px;
-            color: var(--bd-muted);
-        }
-
-        .bd-sommaire-empty {
-            margin: 0;
-            padding: 40px 0;
-            text-align: center;
-            font-size: 14px;
-            color: var(--bd-muted);
-        }
-
-        .bd-row-action {
-            display: flex;
-            justify-content: center;
-        }
-
-        .bd-row-action form {
-            margin: 0;
-        }
-
-        .bd-section-delete {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 6px 10px;
-            font-family: inherit;
-            font-size: 12px;
-            font-weight: 500;
-            color: var(--bd-red);
-            background: transparent;
-            border: 1px solid transparent;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color .2s ease, border-color .2s ease, transform .25s var(--bd-ease);
-        }
-
-        .bd-section-delete:hover {
-            background: #fff1f3;
-            border-color: #fbd0d8;
-            transform: scale(1.06);
-        }
-
-        .bd-section-delete:focus-visible {
-            outline: 2px solid var(--bd-red);
-            outline-offset: 2px;
         }
 
         /* ---------- Lecture / édition d'un document ---------- */
@@ -567,30 +369,12 @@
             to   { opacity: 1; transform: none; }
         }
 
-        @keyframes bd-fade {
-            from { opacity: 0; }
-            to   { opacity: 1; }
-        }
-
-        @keyframes bd-pop {
-            from { opacity: 0; transform: translateY(-6px) scale(.97); }
-            to   { opacity: 1; transform: none; }
-        }
-
         .bd-panel {
             animation: bd-enter .75s var(--bd-ease) both;
         }
 
         .bd-docs-head {
             animation: bd-enter .75s var(--bd-ease) .08s both;
-        }
-
-        .bd-rows-head {
-            animation: bd-fade .6s ease .14s both;
-        }
-
-        .bd-row {
-            animation: bd-enter .65s var(--bd-ease) calc(.16s + var(--i, 0) * 55ms) both;
         }
 
         .bd-enter-body {
@@ -606,49 +390,21 @@
         @media (prefers-reduced-motion: reduce) {
             .bd-panel,
             .bd-docs-head,
-            .bd-rows-head,
-            .bd-row,
-            .bd-enter-body,
-            .bd-section-create[open] .bd-section-form {
+            .bd-enter-body {
                 animation: none;
             }
 
             .bd-add-btn,
-            .bd-back-btn,
-            .bd-section-delete,
-            .bd-section-documents a {
+            .bd-back-btn {
                 transition: none;
             }
         }
 
-        /* ---------- Mobile ---------- */
-        @media (max-width: 720px) {
-            .bd-rows-head {
-                display: none;
-            }
-
-            .bd-rows .bd-row,
-            .bd-rows--actions .bd-row {
-                grid-template-columns: 1fr auto;
-                gap: 12px;
-                padding-left: 4px;
-                padding-right: 4px;
-            }
-
-            .bd-rows-head + .bd-row,
-            .bd-rows .bd-row:first-of-type {
-                border-top: 1px solid var(--bd-line);
-            }
-
-            .bd-row-docs {
-                grid-column: 1 / -1;
-                order: 3;
-            }
-        }
     </style>
 
     @php
-        $isNewDoc = !$isSommaire && isset($document->is_new) && $document->is_new;
+        $isSommaire = $document->slug === 'sommaire';
+        $isNewDoc = isset($document->is_new) && $document->is_new;
     @endphp
 
     <div class="bd-docs">
@@ -681,31 +437,7 @@
                     </a>
 
                     @auth
-                        @if ($isSommaire)
-                            <details class="bd-section-create" @if ($errors->has('title')) open @endif>
-                                <summary class="bd-add-btn">
-                                    Ajouter une section
-                                </summary>
-                                <form class="bd-section-form" action="{{ route('sections.store') }}" method="POST">
-                                    @csrf
-                                    <label for="section-title">Titre de la section</label>
-                                    <input
-                                        class="bd-section-input"
-                                        id="section-title"
-                                        name="title"
-                                        type="text"
-                                        value="{{ old('title') }}"
-                                        maxlength="255"
-                                        required
-                                    >
-                                    <div class="bd-section-form-footer">
-                                        <button class="bd-add-btn" type="submit">Créer</button>
-                                    </div>
-                                </form>
-                            </details>
-                        @endif
-
-                        @if (!$isSommaire && !request()->has('edit'))
+                        @if (!request()->has('edit'))
                             @if (isset($document->is_new) && $document->is_new)
                                 <!-- S'affiche si le doc n'existe pas en BDD -->
                                 <a class="bd-add-btn bd-add-btn--info" href="?edit=1">
@@ -741,83 +473,7 @@
                     </div>
                 @endif
 
-                @if ($isSommaire)
-                    @if ($sections->isEmpty())
-                        <p class="bd-sommaire-empty">Aucune section disponible pour le moment.</p>
-                    @else
-                        <div class="bd-rows @auth bd-rows--actions @endauth">
-                            <div class="bd-rows-head" aria-hidden="true">
-                                <span>Section</span>
-                                <span>Documents</span>
-                                @auth
-                                    <span>Action</span>
-                                @endauth
-                            </div>
-
-                            @foreach ($sections as $section)
-                                @php
-                                    $sectionPage = $section->documents->firstWhere('title', $section->title);
-                                    $childDocuments = $section->documents->reject(
-                                        fn ($sectionDocument) => $sectionPage && $sectionDocument->is($sectionPage),
-                                    );
-                                @endphp
-
-                                <article class="bd-row" style="--i: {{ min($loop->index, 14) }}">
-                                    <div class="bd-row-title">
-                                        <h2 class="bd-section-title">
-                                            @if ($sectionPage)
-                                                <a href="{{ route('documents.show', $sectionPage->slug) }}">
-                                                    {{ $section->title }}
-                                                </a>
-                                            @else
-                                                {{ $section->title }}
-                                            @endif
-                                        </h2>
-                                    </div>
-
-                                    <div class="bd-row-docs">
-                                        @if ($sectionPage && $childDocuments->isEmpty())
-                                            <p class="bd-section-empty">Ouvrir cette section pour consulter son contenu.</p>
-                                        @elseif ($childDocuments->isEmpty())
-                                            <p class="bd-section-empty">Cette section ne contient pas encore de documents.</p>
-                                        @else
-                                            <ul class="bd-section-documents">
-                                                @foreach ($childDocuments as $sectionDocument)
-                                                    <li>
-                                                        <a href="{{ route('documents.show', $sectionDocument->slug) }}">
-                                                            {{ $sectionDocument->title }}
-                                                        </a>
-                                                    </li>
-                                                @endforeach
-                                            </ul>
-                                        @endif
-                                    </div>
-
-                                    @auth
-                                        <div class="bd-row-action">
-                                            <form
-                                                action="{{ route('sections.destroy', $section) }}"
-                                                method="POST"
-                                                onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette section ?');"
-                                            >
-                                                @csrf
-                                                @method('DELETE')
-                                                <button
-                                                    class="bd-section-delete"
-                                                    type="submit"
-                                                    title="Supprimer"
-                                                    aria-label="Supprimer la section {{ $section->title }}"
-                                                >
-                                                    Supprimer
-                                                </button>
-                                            </form>
-                                        </div>
-                                    @endauth
-                                </article>
-                            @endforeach
-                        </div>
-                    @endif
-                @elseif (request()->has('edit') && auth()->check())
+                @if (request()->has('edit') && auth()->check())
                     <!-- NOUVEAU : Zone d'importation de fichier Word local -->
                     <div class="bd-import">
                         <label class="bd-label" for="word-import">
@@ -876,7 +532,7 @@
     </div>
 
     <!--  Script TinyMCE (Appelé uniquement si ?edit=1) -->
-    @if (!$isSommaire && request()->has('edit') && auth()->check())
+    @if (request()->has('edit') && auth()->check())
         <x-slot name="scripts">
             <script src="{{ asset('js/tinymce/tinymce.min.js') }}"></script>
             <script>

@@ -1,0 +1,25 @@
+@startuml
+title BlueDocs - Lecture publique et recherche
+actor Visiteur
+boundary "Routes web" as Routes
+control "DocumentController /\nDocumentSearchController" as Controller
+entity "Eloquent Document" as Document
+database MySQL
+boundary "Vues Blade" as View
+
+Visiteur -> Routes : GET /{slug} ou GET /sommaire
+Routes -> Controller : Action publique de lecture
+Controller -> Document : Rechercher par slug
+Document -> MySQL : SELECT documents
+MySQL --> Document : Document trouvé ou absent
+Document --> Controller : Résultat
+Controller -> View : Rendu docs.sommaire
+View --> Visiteur : Page de lecture
+
+Visiteur -> Routes : GET /recherche?q=...
+Routes -> Controller : Recherche
+Controller -> Controller : Valider la requête
+Controller -> MySQL : Rechercher titre/contenu\net paginer
+MySQL --> Controller : Résultats
+Controller --> Visiteur : Vue docs.search
+@enduml

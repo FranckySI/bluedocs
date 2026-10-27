@@ -1,0 +1,23 @@
+@startuml
+title BlueDocs - Architecture applicative
+left to right direction
+
+actor Navigateur
+component "Routes web.php\nauth.php" as Routes
+component "Middleware\nweb / auth / guest /\ncan:create-users" as Middleware
+component "Contrôleurs HTTP" as Controllers
+component "Modèles Eloquent\nUser / Document" as Models
+component "Vues Blade" as Views
+database MySQL
+component "Événement Login\nUpdateLastLoginAt" as LoginListener
+
+Navigateur --> Routes
+Routes --> Middleware
+Middleware --> Controllers
+Controllers --> Models
+Models --> MySQL
+Controllers --> Views
+Views --> Navigateur
+Controllers ..> LoginListener : connexion
+LoginListener --> Models : mise à jour last_login_at
+@enduml

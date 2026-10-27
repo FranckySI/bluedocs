@@ -28,7 +28,7 @@
 
 
                 <!-- Formulaire de modification -->
-                <form action="{{ route('documents.update', $document->id) }}" method="POST">
+                <form action="{{ route('documents.update', $document) }}" method="POST">
                     @csrf
                     @method('PUT')
 

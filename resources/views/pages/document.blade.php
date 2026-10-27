@@ -366,12 +366,12 @@
                                 </td>
                                 <td>
                                     <div class="bd-actions">
-                                        <a href="{{ route('documents.edit', $document->id) }}" class="bd-btn-action bd-btn-edit">
+                                        <a href="{{ route('documents.edit', $document) }}" class="bd-btn-action bd-btn-edit">
                                             <x-lucide-pencil aria-hidden="true" />
                                             Modifier
                                         </a>
 
-                                        <form action="{{ route('documents.destroy', $document->id) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce document ?');" style="display:inline;">
+                                        <form action="{{ route('documents.destroy', $document) }}" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce document ?');" style="display:inline;">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="bd-btn-action bd-btn-delete">

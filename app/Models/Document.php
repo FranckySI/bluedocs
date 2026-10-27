@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Document extends Model
@@ -11,13 +11,18 @@ class Document extends Model
     use HasFactory;
 
     // Autorise Laravel à remplir ces colonnes d'un coup
-    protected $fillable =[
+    protected $fillable = [
         'title',
         'slug',
         'content',
         'user_name',
         'updated_by',
     ];
+
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
 
     public function editor(): BelongsTo
     {

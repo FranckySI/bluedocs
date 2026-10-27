@@ -1,0 +1,12 @@
+@startuml
+title BlueDocs - Cycle de vie fonctionnel d'un document
+
+[*] --> Absent
+Absent --> Créé : POST /documents\n(auth)
+Créé --> Consulté : GET /{slug}\n(public)
+Consulté --> Modifié : PUT /documents/{slug}\n(auth)
+Modifié --> Consulté : Enregistrement\n(slug conservé)
+Créé --> Supprimé : DELETE /documents/{slug}\n(auth)
+Modifié --> Supprimé : DELETE /documents/{slug}\n(auth)
+Supprimé --> [*]
+@enduml

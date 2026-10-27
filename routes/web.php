@@ -5,16 +5,12 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\DocumentSearchController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\SectionController;
 use Illuminate\Support\Facades\Route;
 
 // ROUTES DE NAVIGATION
 Route::get('/', function () {
     return view('pages.accueil');
 })->name('accueil');
-
-// Dashboard principal
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 // Route du Sommaire
 Route::get('/sommaire', [DocumentController::class, 'showSommaire'])->name('docs.sommaire');
@@ -24,8 +20,7 @@ Route::get('/recherche', DocumentSearchController::class)->name('documents.searc
 
 //  CRUD DES DOCUMENTS (Protégées par Auth)
 Route::middleware('auth')->group(function () {
-    Route::post('/sommaire/sections', [SectionController::class, 'store'])->name('sections.store');
-    Route::delete('/sommaire/sections/{section}', [SectionController::class, 'destroy'])->name('sections.destroy');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Liste des archives / Tous les documents
     Route::get('/documents', [DocumentController::class, 'index'])->name('pages.document');
@@ -34,7 +29,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/documents/create', [DocumentController::class, 'create'])->name('documents.create');
     Route::post('/documents', [DocumentController::class, 'store'])->name('documents.store');
 
-    // Gestion du document par son modèle (Laravel utilise le slug grâce à votre modèle)
+    // Les documents sont liés par leur slug stable.
     Route::get('/documents/{document}/edit', [DocumentController::class, 'edit'])->name('documents.edit');
     Route::put('/documents/{document}', [DocumentController::class, 'update'])->name('documents.update');
     Route::delete('/documents/{document}', [DocumentController::class, 'destroy'])->name('documents.destroy');

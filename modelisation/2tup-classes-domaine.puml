@@ -1,0 +1,40 @@
+@startuml
+title BlueDocs - Classes du domaine
+hide methods
+skinparam classAttributeIconSize 0
+
+class User {
+  +id: bigint
+  +name: string
+  +email: string <<unique>>
+  +role: string = editeur
+  +email_verified_at: timestamp?
+  +password: string
+  +remember_token: string?
+  +last_login_at: timestamp?
+  +created_at: timestamp?
+  +updated_at: timestamp?
+}
+
+class Document {
+  +id: bigint
+  +slug: string <<unique, route key>>
+  +title: string
+  +content: longtext
+  +user_name: string
+  +updated_by: bigint?
+  +created_at: timestamp?
+  +updated_at: timestamp?
+  --
+  +getRouteKeyName(): string
+}
+
+User "0..1" <-- "0..*" Document : dernier éditeur\n(updated_by)
+
+note right of Document
+  Le slug identifie la fiche dans les URL.
+  Il reste stable si le titre change.
+  La suppression du User référencé
+  met updated_by à NULL.
+end note
+@enduml

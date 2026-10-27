@@ -74,6 +74,57 @@ it('rejects a duplicate document slug before hitting the database constraint', f
     $this->assertModelExists($existingDocument);
 });
 
+it('generates a unique slug when a title is reused', function () {
+    $editor = User::factory()->create();
+
+    $this->actingAs($editor)
+        ->post(route('documents.store'), [
+            'title' => 'Guide',
+            'content' => '<p>Contenu.</p>',
+        ])
+        ->assertRedirect(route('docs.sommaire'));
+
+    $this->post(route('documents.store'), [
+        'title' => 'Guide',
+        'content' => '<p>Contenu suivant.</p>',
+    ])
+        ->assertRedirect(route('docs.sommaire'));
+
+    $this->assertDatabaseHas('documents', ['slug' => 'guide']);
+    $this->assertDatabaseHas('documents', ['slug' => 'guide-2']);
+});
+
+it('uses a stable slug to edit a document without changing its public address', function () {
+    $editor = User::factory()->create();
+    $document = Document::create([
+        'title' => 'Guide initial',
+        'slug' => 'guide-stable',
+        'content' => '<p>Ancien contenu.</p>',
+        'user_name' => 'Ancien éditeur',
+    ]);
+
+    $this->actingAs($editor)
+        ->get(route('documents.edit', 'guide-stable'))
+        ->assertOk()
+        ->assertSee('Guide initial');
+
+    $this->put(route('documents.update', 'guide-stable'), [
+        'title' => 'Guide renommé',
+        'content' => '<p>Nouveau contenu.</p>',
+    ])
+        ->assertRedirect(route('docs.sommaire'));
+
+    $this->get(route('documents.show', 'guide-stable'))
+        ->assertOk()
+        ->assertSee('Guide renommé');
+
+    $this->assertDatabaseHas('documents', [
+        'id' => $document->id,
+        'slug' => 'guide-stable',
+        'title' => 'Guide renommé',
+    ]);
+});
+
 it('updates the existing Sommaire document and logs metadata without its content', function () {
     $editor = User::factory()->create();
     $document = Document::create([
