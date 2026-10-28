@@ -1,3 +1,4 @@
+
 @startuml
 title BlueDocs - Cas d'utilisation
 left to right direction
@@ -7,18 +8,30 @@ actor Visiteur
 actor "Éditeur\n(role = editeur)" as Editeur
 actor "Administrateur\n(role = admin)" as Admin
 
+Admin --|> Editeur
+Editeur --|> Visiteur
+
 rectangle BlueDocs {
   usecase "Consulter l'accueil" as UC_Accueil
   usecase "Lire le sommaire\net un document" as UC_Lire
   usecase "Rechercher des documents" as UC_Recherche
-  usecase "Se connecter /\nse déconnecter" as UC_Auth
+  usecase "Authentification" as UC_Auth
+  usecase "Vérifier\nl'authentification" as UC_VerifierAuth
   usecase "Consulter le\ntableau de bord" as UC_Dashboard
-  usecase "Lister les documents" as UC_Lister
   usecase "Créer un document" as UC_Creer
   usecase "Modifier un document" as UC_Modifier
   usecase "Supprimer un document" as UC_Supprimer
   usecase "Gérer son profil" as UC_Profil
   usecase "Créer un compte" as UC_Compte
+  usecase "Supprimer un compte" as UC_CompteSupprimer
+
+  UC_Dashboard ..> UC_VerifierAuth : <<include>>
+  UC_Creer ..> UC_VerifierAuth : <<include>>
+  UC_Modifier ..> UC_VerifierAuth : <<include>>
+  UC_Supprimer ..> UC_VerifierAuth : <<include>>
+  UC_Profil ..> UC_VerifierAuth : <<include>>
+  UC_Compte ..> UC_VerifierAuth : <<include>>
+  UC_CompteSupprimer ..> UC_VerifierAuth : <<include>>
 }
 
 Visiteur --> UC_Accueil
@@ -27,29 +40,18 @@ Visiteur --> UC_Recherche
 
 Editeur --> UC_Auth
 Editeur --> UC_Dashboard
-Editeur --> UC_Lire
-Editeur --> UC_Recherche
-Editeur --> UC_Lister
 Editeur --> UC_Creer
 Editeur --> UC_Modifier
 Editeur --> UC_Supprimer
 Editeur --> UC_Profil
 
-Admin --> UC_Auth
-Admin --> UC_Dashboard
-Admin --> UC_Lire
-Admin --> UC_Recherche
-Admin --> UC_Lister
-Admin --> UC_Creer
-Admin --> UC_Modifier
-Admin --> UC_Supprimer
-Admin --> UC_Profil
 Admin --> UC_Compte
+Admin --> UC_CompteSupprimer
 
-note bottom of UC_Dashboard
-  Route protégée par le middleware auth.
+note bottom of UC_VerifierAuth
+  Vérifie que la session utilisateur
+  est valide avant l'opération.
 end note
-note bottom of UC_Compte
-  Réservé à admin par le Gate create-users.
-end note
+
+
 @enduml
