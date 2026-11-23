@@ -14,11 +14,12 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
+    const alternatives = keywords
+        .sort((left, right) => right.length - left.length)
+        .map(escapeRegex)
+        .join('|');
     const expression = new RegExp(
-        keywords
-            .sort((left, right) => right.length - left.length)
-            .map(escapeRegex)
-            .join('|'),
+        `(?<![\\p{L}\\p{N}'-])(?:${alternatives})(?![\\p{L}\\p{N}'-])`,
         'giu',
     );
     const walker = document.createTreeWalker(content, NodeFilter.SHOW_TEXT, {

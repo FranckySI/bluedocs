@@ -10,6 +10,41 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @php
+            $fontFamilies = [
+                'sans' => "'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif",
+                'serif' => "Georgia, 'Times New Roman', serif",
+                'mono' => "'JetBrains Mono', ui-monospace, monospace",
+            ];
+            $documentationFontFamily = $fontFamilies[$documentationStyle['documentation_font_family']] ?? $fontFamilies['sans'];
+        @endphp
+        <style>
+            :root {
+                --bd-document-font-family: {{ $documentationFontFamily }};
+                --bd-document-font-size: {{ $documentationStyle['documentation_font_size'] }}px;
+                --bd-document-text-color: {{ $documentationStyle['documentation_text_color'] }};
+                --bd-document-heading-color: {{ $documentationStyle['documentation_heading_color'] }};
+                --bd-document-background-color: {{ $documentationStyle['documentation_background_color'] }};
+                --bd-document-line-height: {{ $documentationStyle['documentation_line_height'] }};
+            }
+
+            #document-content {
+                font-family: var(--bd-document-font-family);
+                font-size: var(--bd-document-font-size);
+                line-height: var(--bd-document-line-height);
+                color: var(--bd-document-text-color);
+                background: var(--bd-document-background-color);
+            }
+
+            #document-content h1,
+            #document-content h2,
+            #document-content h3,
+            #document-content h4,
+            #document-content h5,
+            #document-content h6 {
+                color: var(--bd-document-heading-color);
+            }
+        </style>
     </head>
 
     

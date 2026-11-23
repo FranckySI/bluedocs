@@ -83,6 +83,22 @@
                     <x-lucide-user-plus class="{{ $iconClasses }}" aria-hidden="true" />
                     <span>{{ __('Ajouter un utilisateur') }}</span>
                 </a>
+                <a
+                    href="{{ route('users.index') }}"
+                    @click="sidebarOpen = false"
+                    @class([$linkClasses, $activeLinkClasses => request()->routeIs('users.*')])
+                >
+                    <x-lucide-users class="{{ $iconClasses }}" aria-hidden="true" />
+                    <span>{{ __('Gérer les utilisateurs') }}</span>
+                </a>
+                <a
+                    href="{{ route('admin.documentation-style.edit') }}"
+                    @click="sidebarOpen = false"
+                    @class([$linkClasses, $activeLinkClasses => request()->routeIs('admin.documentation-style.*')])
+                >
+                    <x-lucide-palette class="{{ $iconClasses }}" aria-hidden="true" />
+                    <span>{{ __('Style de la documentation') }}</span>
+                </a>
             @endcan
         @endauth
     </nav>
